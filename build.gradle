@@ -1,0 +1,7 @@
+plugins {
+    id 'java'
+}
+
+java {
+    sourceSets.main.java.srcDirs += ['nms/src/main/java']
+}

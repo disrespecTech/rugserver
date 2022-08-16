@@ -1,0 +1,43 @@
+--- a/net/minecraft/server/MinecraftServer.java
++++ b/net/minecraft/server/MinecraftServer.java
+@@ -187,6 +187,8 @@
+     private Thread serverThread;
+     private long currentTime = getCurrentTimeMillis();
+ 
++    private final me.totorewa.dissserver.DissServer dissServer; // disrespecTech
++
+     public MinecraftServer(File workDir, Proxy proxy, File profileCacheDir)
+     {
+         this.serverProxy = proxy;
+@@ -199,6 +201,7 @@
+         this.authService = new YggdrasilAuthenticationService(proxy, UUID.randomUUID().toString());
+         this.sessionService = this.authService.createMinecraftSessionService();
+         this.profileRepo = this.authService.createProfileRepository();
++        this.dissServer = new me.totorewa.dissserver.DissServer(this); // disrespecTech
+     }
+ 
+     protected ServerCommandManager createNewCommandManager()
+@@ -516,6 +519,7 @@
+                 this.statusResponse.setServerDescription(new ChatComponentText(this.motd));
+                 this.statusResponse.setProtocolVersionInfo(new ServerStatusResponse.MinecraftProtocolVersionIdentifier("1.8.8", 47));
+                 this.addFaviconToStatusResponse(this.statusResponse);
++                this.dissServer.onServerStart(); // disrespecTech
+ 
+                 while (this.serverRunning)
+                 {
+@@ -669,6 +673,7 @@
+         }
+ 
+         this.theProfiler.startSection("root");
++        this.dissServer.startTick(this.tickCounter); // disrespecTech
+         this.updateTimeLightAndEntities();
+ 
+         if (i - this.nanoTimeSinceStatusRefresh >= 5000000000L)
+@@ -698,6 +703,7 @@
+         this.theProfiler.startSection("tallying");
+         this.tickTimeArray[this.tickCounter % 100] = System.nanoTime() - i;
+         this.theProfiler.endSection();
++        this.dissServer.endTick(this.tickCounter); // disrespecTech
+         this.theProfiler.startSection("snooper");
+ 
+         if (!this.usageSnooper.isSnooperRunning() && this.tickCounter > 100)
