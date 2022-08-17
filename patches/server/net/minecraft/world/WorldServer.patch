@@ -1,0 +1,11 @@
+--- a/net/minecraft/world/WorldServer.java
++++ b/net/minecraft/world/WorldServer.java
+@@ -93,7 +93,7 @@
+      * the teleporter to use when the entity is being transferred into the dimension
+      */
+     private final Teleporter worldTeleporter;
+-    private final SpawnerAnimals mobSpawner = new SpawnerAnimals();
++    public final SpawnerAnimals mobSpawner = new SpawnerAnimals(); // disrespecTech - private -> public
+     protected final VillageSiege villageSiege = new VillageSiege(this);
+     private WorldServer.ServerBlockEventList[] field_147490_S = new WorldServer.ServerBlockEventList[] {new WorldServer.ServerBlockEventList(), new WorldServer.ServerBlockEventList()};
+     private int blockEventCacheIndex;

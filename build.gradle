@@ -2,6 +2,13 @@ plugins {
     id 'java'
 }
 
+sourceCompatibility = JavaVersion.VERSION_1_6
+targetCompatibility = JavaVersion.VERSION_1_6
+
+dependencies {
+    implementation fileTree(includes: ['**/*.jar'], dir: 'mcp918/jars/libraries')
+}
+
 java {
     sourceSets.main.java.srcDirs += ['nms/src/main/java']
 }

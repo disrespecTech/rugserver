@@ -1,0 +1,11 @@
+--- a/net/minecraft/entity/player/EntityPlayerMP.java
++++ b/net/minecraft/entity/player/EntityPlayerMP.java
+@@ -1145,7 +1145,7 @@
+         {
+             return true;
+         }
+-        else if (!"tell".equals(commandName) && !"help".equals(commandName) && !"me".equals(commandName) && !"trigger".equals(commandName))
++        else if (!"tell".equals(commandName) && !"help".equals(commandName) && !"me".equals(commandName) && !"trigger".equals(commandName) && !this.mcServer.dissServer.isNonOpCommand(commandName)) // disrespecTech
+         {
+             if (this.mcServer.getConfigurationManager().canSendCommands(this.getGameProfile()))
+             {
