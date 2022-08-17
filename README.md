@@ -1,13 +1,8 @@
-# Disrespect Server
+# Rugmod
 
-This repository contains patch files to apply modifications to the Minecraft 1.8.8 server using MCP.
-Currently does nothing. 
+Rugmod is a low-effort carpetmod rip-off for Minecraft 1.8.8. It doesn't do nearly as much, and there's no automatic build scripts for it. It uses MCP to help modify Minecraft, the modifications for which are stored as patch files in this repository.
 
-## No build instructions
+This was created for the *disrespecTech* server which will eventually play in 1.8 for some time and this mod tries to bring some modern-day tooling/information such as TPS and mobcap logging to old MC.
 
-Instructions on how to build this project is not provided and the shell scripts are not complete. No help will be offered.
-
-These server modifications are for the disrespecTech 1.8 SMP server and is not intended to be built and used by others (though you are free to do so if you can figure it out), but rather this repository exists for the sake of transparency regarding the modifications that have been made.
-
-
+You are free to build and use this yourself, however no build scripts or help is offered. This mod is for a private server and is only made public for transparency.
 
