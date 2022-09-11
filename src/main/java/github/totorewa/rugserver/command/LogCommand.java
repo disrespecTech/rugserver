@@ -29,10 +29,10 @@ public class LogCommand extends AbstractCommand {
         if (logger == null) throw new SyntaxException();
         if (source.getEntity() instanceof PlayerEntity) {
             boolean enabled = logger.toggleLogging(((PlayerEntity)source).getGameProfile().getName());
-            source.sendMessage(new Message("You have ", Message.GRAY | Message.ITALIC)
-            .add(enabled ? "subscribed" : "unsubscribed", Message.BOLD)
-                    .add(" to ", Message.GRAY | Message.ITALIC)
-                    .add(logger.name, Message.BOLD).toText());
+            source.sendMessage(new Message("You have ", Message.GRAY)
+            .add(enabled ? "subscribed" : "unsubscribed", Message.ITALIC)
+                    .add(" to ", Message.RESET | Message.GRAY)
+                    .add(logger.name, Message.ITALIC).toText());
         }
     }
 }

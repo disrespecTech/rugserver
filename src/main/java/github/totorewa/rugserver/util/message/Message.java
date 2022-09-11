@@ -10,28 +10,28 @@ import java.util.Iterator;
 import java.util.List;
 
 public class Message {
-    public static final int RESET = 0;
-    public static final int BLACK = 1;
-    public static final int DARK_BLUE = 2;
-    public static final int DARK_GREEN = 4;
-    public static final int DARK_AQUA = 8;
-    public static final int DARK_RED = 16;
-    public static final int DARK_PURPLE = 32;
-    public static final int GOLD = 64;
-    public static final int GRAY = 128;
-    public static final int DARK_GRAY = 256;
-    public static final int BLUE = 512;
-    public static final int GREEN = 1024;
-    public static final int AQUA = 2048;
-    public static final int RED = 4096;
-    public static final int LIGHT_PURPLE = 8192;
-    public static final int YELLOW = 16384;
-    public static final int WHITE = 32768;
-    public static final int OBFUSCATED = 65536;
-    public static final int BOLD = 131072;
-    public static final int STRIKETHROUGH = 262144;
-    public static final int UNDERLINE = 524288;
-    public static final int ITALIC = 1048576;
+    public static final int RESET = 1;
+    public static final int BLACK = 2;
+    public static final int DARK_BLUE = 4;
+    public static final int DARK_GREEN = 8;
+    public static final int DARK_AQUA = 16;
+    public static final int DARK_RED = 32;
+    public static final int DARK_PURPLE = 64;
+    public static final int GOLD = 128;
+    public static final int GRAY = 256;
+    public static final int DARK_GRAY = 512;
+    public static final int BLUE = 1024;
+    public static final int GREEN = 2048;
+    public static final int AQUA = 4096;
+    public static final int RED = 8192;
+    public static final int LIGHT_PURPLE = 16384;
+    public static final int YELLOW = 32768;
+    public static final int WHITE = 65536;
+    public static final int OBFUSCATED = 131072;
+    public static final int BOLD = 262144;
+    public static final int STRIKETHROUGH = 524288;
+    public static final int UNDERLINE = 1048576;
+    public static final int ITALIC = 2097152;
 
     private final String text;
     private final int flags;
@@ -99,14 +99,13 @@ public class Message {
     }
 
     private static void applyStyle(Style style, int flags) {
-        if (flags == RESET) {
+        if ((flags & RESET) == RESET) {
             style.setFormatting(Formatting.RESET);
             style.setBold(false);
             style.setObfuscated(false);
             style.setStrikethrough(false);
             style.setUnderline(false);
             style.setItalic(false);
-            return;
         }
 
         if ((flags & BLACK) == BLACK) style.setFormatting(Formatting.BLACK);

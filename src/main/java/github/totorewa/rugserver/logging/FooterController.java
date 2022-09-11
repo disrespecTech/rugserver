@@ -32,8 +32,8 @@ public class FooterController {
             for (FooterEntry entry : footers) {
                 if (entry.getFooter() == null) continue;
                 if (!entry.logger.isLogging(player.getGameProfile().getName())) continue;
-                if (message == null) message = entry.getFooter();
-                else message.add("\n").add(entry.getFooter());
+                if (message == null) message = new Message().add(entry.getFooter());
+                else message.add("\n", Message.RESET).add(entry.getFooter());
             }
             if (message == null) continue;
             PlayerListHeaderS2CPacket packet = new PlayerListHeaderS2CPacket(new LiteralText(""));

@@ -93,8 +93,8 @@ public class InfoLogger {
                     else footer.add("  ", Message.WHITE);
                     int count = world.method_3616(category.getCategoryClass());
                     int cap = category.getSpawnCap() * chunks / MobSpawnerHelperAccessor.getMagicNumber();
-                    footer.add(String.valueOf(count), Message.RESET)
-                            .add("/")
+                    footer.add(String.valueOf(count), MessageHelper.getHeatmapColor(count, cap))
+                            .add("/", Message.RESET)
                             .add(String.valueOf(cap), MessageHelper.getEntityCategoryColor(category));
                 }
                 if (footer != null) ((FooterLogger) logger).footer.setFooter(footer);
