@@ -2,7 +2,10 @@ package github.totorewa.rugserver.mixin.feature.oneplayersleep;
 
 import github.totorewa.rugserver.util.message.Message;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.network.packet.s2c.play.ChatMessageS2CPacket;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.PlayerWorldManager;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
 import net.minecraft.util.profiler.Profiler;
@@ -23,6 +26,8 @@ public abstract class ServerWorldMixin extends World {
     private boolean ready;
 
     @Shadow public abstract MinecraftServer getServer();
+
+    @Shadow public abstract PlayerWorldManager getPlayerWorldManager();
 
     private String sleepingPlayerName;
 
@@ -65,11 +70,15 @@ public abstract class ServerWorldMixin extends World {
 
     @Inject(method = "method_2141", at = @At("RETURN"))
     private void announceSleeper(CallbackInfo ci) {
-        if (sleepingPlayerName != null) {
+        if (sleepingPlayerName != null && playerEntities.size() > 1) {
             Text message = new Message(sleepingPlayerName, Message.YELLOW)
                     .add(" went to sleep. Sweet Dreams!", Message.GOLD)
                     .toText();
-            getServer().getPlayerManager().sendToAll(message);
+            ChatMessageS2CPacket packet = new ChatMessageS2CPacket(message);
+            for (PlayerEntity player : playerEntities) {
+                if (((ServerPlayerEntity)player).networkHandler != null)
+                    ((ServerPlayerEntity)player).networkHandler.sendPacket(packet);
+            }
         }
     }
 }
