@@ -1,0 +1,18 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "github.totorewa.rugserver.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "server": [
+    "commands.CommandManagerMixin",
+    "commands.ServerPlayerEntityMixin",
+    "feature.oneplayersleep.ServerWorldMixin",
+    "logging.MobSpawnerHelperMixin",
+    "logging.MobSpawnerHelperAccessor",
+    "logging.PlayerListHeaderS2CPacketAccessor",
+    "logging.ServerWorldAccessor"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

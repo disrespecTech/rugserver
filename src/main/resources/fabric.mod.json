@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "id": "modid",
+  "version": "${version}",
+  "name": "Rug server",
+  "description": "We have carpet at home",
+  "authors": [
+    "Totorewa"
+  ],
+  "contact": {
+    "homepage": "https://github.com/totorewa",
+    "sources": "https://github.com/totorewa/rugserver"
+  },
+  "license": "MIT",
+  "icon": "assets/rugserver/icon.png",
+  "environment": "server",
+  "entrypoints": {
+    "main": [
+      "github.totorewa.rugserver.RugServerMod"
+    ]
+  },
+  "mixins": [
+    "rugserver.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.12.0",
+    "minecraft": "1.8.9"
+  }
+}
