@@ -9,6 +9,6 @@ import org.spongepowered.asm.mixin.injection.ModifyConstant;
 public class ServerPlayerInteractionManagerMixin {
     @ModifyConstant(method = "method_10764", constant = @Constant(floatValue = 0.7f))
     private float relaxBlockBreakTime(float constant) {
-        return 0.0f;
+        return 0.001f;
     }
 }
