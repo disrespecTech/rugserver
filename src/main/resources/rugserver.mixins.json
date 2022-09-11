@@ -7,9 +7,11 @@
     "commands.CommandManagerMixin",
     "commands.ServerPlayerEntityMixin",
     "feature.cameramode.ServerPlayerEntityMixin",
+    "feature.carefulbreak.BlockMixin",
+    "feature.carefulbreak.ServerPlayerInteractionManagerMixin",
     "feature.oneplayersleep.ServerWorldMixin",
-    "logging.MobSpawnerHelperMixin",
     "logging.MobSpawnerHelperAccessor",
+    "logging.MobSpawnerHelperMixin",
     "logging.PlayerListHeaderS2CPacketAccessor",
     "logging.ServerWorldAccessor"
   ],

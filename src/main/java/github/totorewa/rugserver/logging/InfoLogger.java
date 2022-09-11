@@ -101,14 +101,28 @@ public class InfoLogger {
             }
         });
 
+        final InfoLogger carefulBreak = new InfoLogger("carefulBreak", new LoggingTick() {
+            @Override
+            public boolean shouldTick(World world) {
+                return false;
+            }
+
+            @Override
+            public void tick(ServerWorld world, InfoLogger logger, long tick) {
+
+            }
+        });
+
         tpsInfo.initialize();
         mobcapInfo.initialize();
+        carefulBreak.initialize();
 
         loggers.put("tps", tpsInfo);
         loggers.put("mobcaps", mobcapInfo);
+        loggers.put("carefulBreak", carefulBreak);
     }
 
-    private static InfoLogger getLogger(String name) {
+    public static InfoLogger getLogger(String name) {
         return loggers.get(name);
     }
 }
