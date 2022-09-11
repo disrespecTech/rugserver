@@ -6,6 +6,7 @@
   "server": [
     "commands.CommandManagerMixin",
     "commands.ServerPlayerEntityMixin",
+    "feature.cameramode.ServerPlayerEntityMixin",
     "feature.oneplayersleep.ServerWorldMixin",
     "logging.MobSpawnerHelperMixin",
     "logging.MobSpawnerHelperAccessor",
