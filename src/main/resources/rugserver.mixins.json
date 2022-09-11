@@ -6,6 +6,8 @@
   "server": [
     "commands.CommandManagerMixin",
     "commands.ServerPlayerEntityMixin",
+    "feature.anticheat.ServerPlayerInteractionManagerMixin",
+    "feature.anticheat.ServerPlayNetworkHandlerMixin",
     "feature.cameramode.ServerPlayerEntityMixin",
     "feature.carefulbreak.BlockMixin",
     "feature.carefulbreak.ServerPlayerInteractionManagerMixin",
