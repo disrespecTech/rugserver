@@ -1,13 +1,14 @@
 package github.totorewa.rugserver.mixin.feature.anticheat;
 
-import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.packet.c2s.play.ChatMessageC2SPacket;
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
 import net.minecraft.server.network.ServerPlayNetworkHandler;
-import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.injection.*;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Constant;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyConstant;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ServerPlayNetworkHandler.class)
@@ -23,17 +24,14 @@ public class ServerPlayNetworkHandlerMixin {
         return Double.MAX_VALUE;
     }
 
-    @ModifyConstant(method = "onPlayerMove", constant = @Constant(doubleValue = 0.0625))
-    private double overrideMovementLimit(double constant) {
+    @ModifyConstant(method = "onPlayerMove", constant = @Constant(doubleValue = 100))
+    private double allowMovementToExceedVelocity(double constant) {
         return Double.MAX_VALUE;
     }
 
-    @Redirect(method = "onPlayerMove", at = @At(
-            value = "FIELD",
-            target = "Lnet/minecraft/entity/player/ServerPlayerEntity;noClip:Z",
-            opcode = Opcodes.GETFIELD))
-    private boolean allowClipping(ServerPlayerEntity instance) {
-        return true;
+    @ModifyConstant(method = "onPlayerMove", constant = @Constant(doubleValue = 0.0625))
+    private double overrideMovementWarning(double constant) {
+        return Double.MAX_VALUE;
     }
 
     @Inject(method = "onPlayerMove", at = @At("HEAD"))
