@@ -34,6 +34,7 @@ public class FakeServerPlayerEntity extends ServerPlayerEntity {
     @Override
     public void tick() {
         super.tick();
+        tickPlayer();
     }
 
     @Override

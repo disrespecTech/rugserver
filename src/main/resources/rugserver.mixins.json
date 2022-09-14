@@ -13,6 +13,7 @@
     "feature.carefulbreak.ServerPlayerInteractionManagerMixin",
     "feature.oneplayersleep.ServerWorldMixin",
     "feature.player.PlayerManagerMixin",
+    "feature.player.LivingEntityMixin",
     "logging.MobSpawnerHelperAccessor",
     "logging.MobSpawnerHelperMixin",
     "logging.PlayerListHeaderS2CPacketAccessor",

@@ -80,6 +80,8 @@ public class FakePlayerManager {
             playerManager.method_1986(player, otherWorld);
             player.networkHandler.requestTeleport(spawner.x, spawner.y, spawner.z, spawner.yaw, spawner.pitch);
             player.interactionManager.setWorld(world);
+        } else {
+            player.networkHandler.requestTeleport(spawner.x, spawner.y, spawner.z, spawner.yaw, spawner.pitch);
         }
 
         spawnPlayerIntoWorld(player, spawner.interactionManager.getGameMode());
@@ -102,7 +104,10 @@ public class FakePlayerManager {
 
     private void spawnPlayerIntoWorld(FakeServerPlayerEntity player, LevelInfo.GameMode gameMode) {
         player.removed = false;
-        player.stepHeight = 0.6F;
+        player.stepHeight = 0.6f;
+        player.setHealth(20.0f);
+        player.updateVelocity(0.0f, 0.0f, 0.0f);
+        player.abilities.allowFlying = !server.getDefaultGameMode().isSurvivalLike();
         player.interactionManager.setGameMode(gameMode);
         playerManager.sendToDimension(new EntitySetHeadYawS2CPacket(player, (byte) (player.headYaw * 256.0f / 360.0f)), player.dimension);
         playerManager.sendToDimension(new EntityPositionS2CPacket(player), player.dimension);
