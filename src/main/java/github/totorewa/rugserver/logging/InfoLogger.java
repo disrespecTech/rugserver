@@ -1,6 +1,7 @@
 package github.totorewa.rugserver.logging;
 
 import github.totorewa.rugserver.fake.ITickRate;
+import github.totorewa.rugserver.RugSettings;
 import github.totorewa.rugserver.helper.MessageHelper;
 import github.totorewa.rugserver.fake.IMobSpawnerHelper;
 import github.totorewa.rugserver.mixin.logging.MobSpawnerHelperAccessor;
@@ -48,11 +49,15 @@ public class InfoLogger {
         return entitiesLogging.contains(username);
     }
 
+    public boolean isEnabled() {
+        return true;
+    }
+
     public void initialize() {
     }
 
     public void tick(ServerWorld world, long tick) {
-        if (tick % ticker.getInterval() == 0 && ticker.shouldTick(world))
+        if (isEnabled() && tick % ticker.getInterval() == 0 && ticker.shouldTick(world))
             ticker.tick(world, this, tick);
     }
 
@@ -69,7 +74,7 @@ public class InfoLogger {
     public static void registerLoggers() {
         final InfoLogger tpsInfo = new FooterLogger("tps", (world, logger, tick) -> {
             double mspt = MathHelper.average(world.getServer().lastTickLengths) * 1.0E-6D;
-            double maxMspt = ((ITickRate)world.getServer()).getTickSpeed();
+            double maxMspt = ((ITickRate) world.getServer()).getTickSpeed();
             double tps = 1000.0D / Math.max(maxMspt, mspt);
             int heatStyle = MessageHelper.getHeatmapColor(mspt, maxMspt);
             Message tpsFooter = new Message("TPS: ", Message.GRAY)
@@ -103,25 +108,14 @@ public class InfoLogger {
             }
         });
 
-        final InfoLogger carefulBreak = new InfoLogger("carefulBreak", new LoggingTick() {
-            @Override
-            public boolean shouldTick(World world) {
-                return false;
-            }
-
-            @Override
-            public void tick(ServerWorld world, InfoLogger logger, long tick) {
-
-            }
-        });
-
-        tpsInfo.initialize();
-        mobcapInfo.initialize();
-        carefulBreak.initialize();
+        final InfoLogger carefulBreak = new BlankLogger("carefulBreak", () -> RugSettings.carefulBreak);
 
         loggers.put("tps", tpsInfo);
         loggers.put("mobcaps", mobcapInfo);
         loggers.put("carefulBreak", carefulBreak);
+
+        for (InfoLogger logger : loggers.values())
+            logger.initialize();
     }
 
     public static InfoLogger getLogger(String name) {

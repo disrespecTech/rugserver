@@ -1,6 +1,7 @@
 package github.totorewa.rugserver.command;
 
 import com.google.common.collect.Lists;
+import github.totorewa.rugserver.RugSettings;
 import github.totorewa.rugserver.feature.player.FakePlayerManager;
 import github.totorewa.rugserver.util.message.Message;
 import net.minecraft.command.AbstractCommand;
@@ -17,11 +18,7 @@ import net.minecraft.world.World;
 import java.util.Arrays;
 import java.util.List;
 
-public class PlayerCommand extends AbstractCommand {
-    public PlayerCommand() {
-        ModCommandRegistry.register(this);
-    }
-
+public class PlayerCommand extends AbstractRugCommand {
     @Override
     public String getCommandName() {
         return "player";
@@ -30,6 +27,11 @@ public class PlayerCommand extends AbstractCommand {
     @Override
     public String getUsageTranslationKey(CommandSource source) {
         return "player";
+    }
+
+    @Override
+    protected boolean isEnabled(CommandSource source) {
+        return RugSettings.commandPlayer.isEnabled(source);
     }
 
     @Override

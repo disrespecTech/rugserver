@@ -16,11 +16,7 @@ import net.minecraft.world.World;
 import java.util.Arrays;
 import java.util.List;
 
-public class TickCommand extends AbstractCommand {
-    public TickCommand() {
-        ModCommandRegistry.register(this);
-    }
-
+public class TickCommand extends AbstractRugCommand {
     @Override
     public String getCommandName() {
         return "tick";

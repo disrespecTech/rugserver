@@ -12,7 +12,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public class RugServerMod implements ModInitializer, Tickable {
     public static RugServerMod mod;
     public MinecraftServer server;
-    public boolean creativeEnabled;
 
     @Override
     public void onInitialize() {
@@ -34,6 +33,5 @@ public class RugServerMod implements ModInitializer, Tickable {
         this.server = server;
         server.addTickable(this);
         InfoLogger.registerLoggers();
-        creativeEnabled = !server.getDefaultGameMode().isSurvivalLike();
     }
 }
