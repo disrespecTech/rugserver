@@ -1,11 +1,11 @@
 package github.totorewa.rugserver.mixin.feature.oneplayersleep;
 
+import github.totorewa.rugserver.feature.player.FakeServerPlayerEntity;
 import github.totorewa.rugserver.util.message.Message;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.packet.s2c.play.ChatMessageS2CPacket;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.PlayerWorldManager;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
 import net.minecraft.util.profiler.Profiler;
@@ -22,12 +22,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ServerWorld.class)
 public abstract class ServerWorldMixin extends World {
+    private static final int SLEEP_PERCENTAGE = 0;
     @Shadow
     private boolean ready;
 
-    @Shadow public abstract MinecraftServer getServer();
-
-    @Shadow public abstract PlayerWorldManager getPlayerWorldManager();
+    @Shadow
+    public abstract MinecraftServer getServer();
 
     private String sleepingPlayerName;
 
@@ -41,12 +41,29 @@ public abstract class ServerWorldMixin extends World {
      */
     @Overwrite
     public void method_3669() {
-        this.ready = false;
-        for (PlayerEntity player : playerEntities) {
-            if (player.isSleeping()) {
-                this.ready = true;
-                return;
+        ready = SLEEP_PERCENTAGE > 0 || isAnyPlayerSleeping();
+        if (ready) return;
+
+        if (!playerEntities.isEmpty()) {
+            int playerCount = 0;
+            int sleepCount = 0;
+            for (PlayerEntity player : playerEntities) {
+                if (!player.isSpectator()) {
+                    if (!(player instanceof FakeServerPlayerEntity))
+                        playerCount++;
+                    if (player.isSleeping()) {
+                        if (SLEEP_PERCENTAGE == 0) {
+                            ready = true;
+                            return;
+                        }
+                        sleepCount++;
+                    }
+                }
             }
+            ready = sleepCount > 0 &&
+                    (SLEEP_PERCENTAGE == 100 &&
+                            sleepCount >= playerCount ||
+                            ((float) sleepCount / playerCount * 100) >= SLEEP_PERCENTAGE);
         }
     }
 
@@ -56,16 +73,23 @@ public abstract class ServerWorldMixin extends World {
      */
     @Overwrite
     public boolean isReady() {
-        if (this.ready && !this.isClient) {
+        boolean defaultValue = SLEEP_PERCENTAGE > 0;
+        if (ready && !isClient) {
             for (PlayerEntity player : playerEntities) {
                 if (player.isSleepingLongEnough()) {
-                    sleepingPlayerName = player.getGameProfile().getName();
-                    return true;
-                }
+                    if (!defaultValue) {
+                        sleepingPlayerName = player.getGameProfile().getName();
+                        return true;
+                    }
+                } else if (defaultValue &&
+                        !player.isSpectator() &&
+                        !(player instanceof FakeServerPlayerEntity) &&
+                        player.isSleeping())
+                    return false;
             }
         }
 
-        return false;
+        return defaultValue;
     }
 
     @Inject(method = "method_2141", at = @At("RETURN"))
@@ -74,11 +98,19 @@ public abstract class ServerWorldMixin extends World {
             Text message = new Message(sleepingPlayerName, Message.YELLOW)
                     .add(" went to sleep. Sweet Dreams!", Message.GOLD)
                     .toText();
+            sleepingPlayerName = null;
             ChatMessageS2CPacket packet = new ChatMessageS2CPacket(message);
             for (PlayerEntity player : playerEntities) {
-                if (((ServerPlayerEntity)player).networkHandler != null)
-                    ((ServerPlayerEntity)player).networkHandler.sendPacket(packet);
+                if (((ServerPlayerEntity) player).networkHandler != null)
+                    ((ServerPlayerEntity) player).networkHandler.sendPacket(packet);
             }
         }
+    }
+
+    private boolean isAnyPlayerSleeping() {
+        for (PlayerEntity player : playerEntities) {
+            if (player.isSleeping()) return true;
+        }
+        return false;
     }
 }
