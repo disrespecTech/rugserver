@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "id": "modid",
+  "id": "rugserver",
   "version": "${version}",
   "name": "Rug server",
   "description": "We have carpet at home",
