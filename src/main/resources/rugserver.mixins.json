@@ -14,10 +14,18 @@
     "feature.oneplayersleep.ServerWorldMixin",
     "feature.player.PlayerManagerMixin",
     "feature.player.LivingEntityMixin",
+    "lifecycle.MinecraftDedicatedServerMixin_startup",
     "logging.MobSpawnerHelperAccessor",
     "logging.MobSpawnerHelperMixin",
     "logging.PlayerListHeaderS2CPacketAccessor",
     "logging.ServerWorldAccessor"
+  ],
+  "mixins": [
+    "feature.fill.ChunkMixin",
+    "feature.fill.CloneCommandMixin",
+    "feature.fill.FillCommandMixin",
+    "feature.fill.SetBlockCommandMixin",
+    "feature.fill.WorldMixin"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -7,24 +7,33 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Tickable;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 public class RugServerMod implements ModInitializer, Tickable {
     public static RugServerMod mod;
+    public MinecraftServer server;
+    public boolean creativeEnabled;
 
     @Override
     public void onInitialize() {
         mod = this;
-        MinecraftServer.getServer().addTickable(this);
-        InfoLogger.registerLoggers();
     }
 
     @Override
     public void tick() {
-        final MinecraftServer server = MinecraftServer.getServer();
+        checkNotNull(server);
         for (ServerWorld world : server.worlds) {
             for (InfoLogger logger : InfoLogger.loggers.values()) {
                 logger.tick(world, server.getTicks());
             }
             FooterController.tick(world, server.getTicks());
         }
+    }
+
+    public void onServerSetup(MinecraftServer server) {
+        this.server = server;
+        server.addTickable(this);
+        InfoLogger.registerLoggers();
+        creativeEnabled = !server.getDefaultGameMode().isSurvivalLike();
     }
 }
