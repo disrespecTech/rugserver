@@ -65,7 +65,7 @@ public class FakePlayerManager {
         ServerWorld world = spawner.getServerWorld();
         ServerPlayerInteractionManager interactionManager = new ServerPlayerInteractionManager(world);
 
-        FakeServerPlayerEntity player = new FakeServerPlayerEntity(server, world, profile, interactionManager);
+        FakeServerPlayerEntity player = new FakeServerPlayerEntity(server, world, profile, interactionManager, false);
         player.setStartingPosition(spawner.x, spawner.y, spawner.z, spawner.yaw, spawner.pitch);
         playerManager.onPlayerConnect(new FakeClientConnection(), player);
 
@@ -95,7 +95,7 @@ public class FakePlayerManager {
         player.networkHandler.disconnect("You logged in from another location");
         SkullBlockEntity.method_8997(profile); // Load skin texture
 
-        FakeServerPlayerEntity shadow = new FakeServerPlayerEntity(server, world, profile, interactionManager);
+        FakeServerPlayerEntity shadow = new FakeServerPlayerEntity(server, world, profile, interactionManager, true);
         shadow.setStartingPosition(player.x, player.y, player.z, player.yaw, player.pitch);
         playerManager.onPlayerConnect(new FakeClientConnection(), shadow);
         spawnPlayerIntoWorld(shadow, player.interactionManager.getGameMode());
