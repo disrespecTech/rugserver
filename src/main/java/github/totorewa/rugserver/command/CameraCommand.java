@@ -2,11 +2,9 @@ package github.totorewa.rugserver.command;
 
 import github.totorewa.rugserver.fake.PlayerCameraHandler;
 import github.totorewa.rugserver.util.message.Message;
-import net.minecraft.command.AbstractCommand;
-import net.minecraft.command.CommandException;
-import net.minecraft.command.CommandSource;
-import net.minecraft.command.PlayerNotFoundException;
+import net.minecraft.command.*;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.server.command.CloneCommand;
 
 public class CameraCommand extends AbstractCommand {
     public CameraCommand() {
@@ -38,7 +36,8 @@ public class CameraCommand extends AbstractCommand {
                     .add("unknown", Message.ITALIC).toText());
         } else {
             player.sendMessage(new Message(cameraHandler.isInCameraMode() ? "Entering " : "Exiting ", Message.AQUA)
-            .add("camera mode", Message.RESET).toText());
+                    .add("camera mode", Message.RESET).toText());
+            AbstractCommand.run(source, this, 1,(cameraHandler.isInCameraMode() ? "Entered " : "Exited ") + "camera mode");
         }
     }
 }

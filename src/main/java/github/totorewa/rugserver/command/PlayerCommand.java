@@ -77,11 +77,13 @@ public class PlayerCommand extends AbstractCommand {
             source.sendMessage(new Message("You can not spawn a player who is already online", Message.RED).toText());
         else if (!FakePlayerManager.getInstance(player.server).spawnFake(username, player))
             source.sendMessage(new Message("Failed to spawn player", Message.RED).toText());
+        else AbstractCommand.run(source, this, 1,String.format("%s %s", "Spawned player", username));
     }
 
     private void handleKill(String username, CommandSource source) {
         if (!FakePlayerManager.getInstance(((ServerWorld) source.getWorld()).getServer()).killFake(username))
             source.sendMessage(new Message("Failed to kill player", Message.RED).toText());
+        else AbstractCommand.run(source, this, 1, String.format("%s %s", "Killed player", username));
     }
 
     private void handleShadow(String username, CommandSource source) {
@@ -90,6 +92,7 @@ public class PlayerCommand extends AbstractCommand {
         ServerPlayerEntity player = (ServerPlayerEntity) entity;
         if (!player.getGameProfile().getName().equalsIgnoreCase(username))
             source.sendMessage(new Message("You can only shadow yourself", Message.RED).toText());
-        else FakePlayerManager.getInstance(player.server).spawnShadow(player);
+        else if (FakePlayerManager.getInstance(player.server).spawnShadow(player))
+            AbstractCommand.run(source, this, 1,String.format("%s %s", "Spawned shadow", username));
     }
 }
