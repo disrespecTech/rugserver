@@ -26,7 +26,7 @@ public class WorldMixin implements IFillUpdateState {
         this.suppressingNeighborUpdates = (i & 128) != 0;
     }
 
-    @Inject(method = "method_8506", at = @At("TAIL"))
+    @Inject(method = "method_8506", at = @At("RETURN"))
     private void unsetNeighborUpdateSuppressor(BlockPos blockPos, BlockState blockState, int i, CallbackInfoReturnable<Boolean> cir) {
         this.suppressingNeighborUpdates = false;
     }

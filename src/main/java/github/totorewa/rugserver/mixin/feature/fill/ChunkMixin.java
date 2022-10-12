@@ -44,6 +44,6 @@ public abstract class ChunkMixin {
                     target = "Lnet/minecraft/block/Block;onCreation(Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/BlockState;)V"))
     private void suppressCreationUpdates(Block block, World world, BlockPos pos, BlockState state) {
         if (!((IFillUpdateState)world).suppressNeighborUpdates())
-            block.onBreaking(world, pos, state);
+            block.onCreation(world, pos, state);
     }
 }
