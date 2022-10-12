@@ -25,7 +25,8 @@
     "feature.fill.CloneCommandMixin",
     "feature.fill.FillCommandMixin",
     "feature.fill.SetBlockCommandMixin",
-    "feature.fill.WorldMixin"
+    "feature.fill.WorldMixin",
+    "feature.oneblocksuppressor.WorldMixin"
   ],
   "injectors": {
     "defaultRequire": 1
