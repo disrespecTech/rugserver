@@ -23,7 +23,7 @@ public class CloneCommandMixin {
         return flags | (RugServerMod.mod.creativeEnabled ? 128 : 0);
     }
 
-    @ModifyConstant(method = "execute", constant = @Constant(intValue = 3))
+    @ModifyConstant(method = "execute", constant = @Constant(intValue = 3, ordinal = 1))
     private int overrideFlags2(int flags) {
         return flags | (RugServerMod.mod.creativeEnabled ? 128 : 0);
     }
