@@ -1,5 +1,6 @@
 package github.totorewa.rugserver.logging;
 
+import github.totorewa.rugserver.fake.ITickRate;
 import github.totorewa.rugserver.helper.MessageHelper;
 import github.totorewa.rugserver.fake.IMobSpawnerHelper;
 import github.totorewa.rugserver.mixin.logging.MobSpawnerHelperAccessor;
@@ -68,8 +69,9 @@ public class InfoLogger {
     public static void registerLoggers() {
         final InfoLogger tpsInfo = new FooterLogger("tps", (world, logger, tick) -> {
             double mspt = MathHelper.average(world.getServer().lastTickLengths) * 1.0E-6D;
-            double tps = 1000.0D / Math.max(50.0D, mspt);
-            int heatStyle = MessageHelper.getHeatmapColor(mspt, 50);
+            double maxMspt = ((ITickRate)world.getServer()).getTickSpeed();
+            double tps = 1000.0D / Math.max(maxMspt, mspt);
+            int heatStyle = MessageHelper.getHeatmapColor(mspt, maxMspt);
             Message tpsFooter = new Message("TPS: ", Message.GRAY)
                     .add(MessageHelper.formatDouble(tps), heatStyle)
                     .add(" MSPT: ", Message.GRAY)

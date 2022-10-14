@@ -37,7 +37,7 @@ public class CameraCommand extends AbstractCommand {
         } else {
             player.sendMessage(new Message(cameraHandler.isInCameraMode() ? "Entering " : "Exiting ", Message.AQUA)
                     .add("camera mode", Message.RESET).toText());
-            AbstractCommand.run(source, this, 1,(cameraHandler.isInCameraMode() ? "Entered " : "Exited ") + "camera mode");
+            AbstractCommand.run(source, this, 1, String.format("%s camera mode", cameraHandler.isInCameraMode() ? "Entered" : "Exited"));
         }
     }
 }

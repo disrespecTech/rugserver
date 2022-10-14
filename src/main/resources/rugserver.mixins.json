@@ -14,6 +14,7 @@
     "feature.oneplayersleep.ServerWorldMixin",
     "feature.player.PlayerManagerMixin",
     "feature.player.LivingEntityMixin",
+    "feature.tick.MinecraftServerMixin",
     "lifecycle.MinecraftDedicatedServerMixin_startup",
     "logging.MobSpawnerHelperAccessor",
     "logging.MobSpawnerHelperMixin",
