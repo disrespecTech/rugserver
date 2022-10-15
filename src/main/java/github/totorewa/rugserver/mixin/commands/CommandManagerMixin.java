@@ -1,9 +1,6 @@
 package github.totorewa.rugserver.mixin.commands;
 
-import github.totorewa.rugserver.command.CameraCommand;
-import github.totorewa.rugserver.command.LogCommand;
-import github.totorewa.rugserver.command.PlayerCommand;
-import github.totorewa.rugserver.command.TickCommand;
+import github.totorewa.rugserver.command.*;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.CommandRegistry;
 import org.spongepowered.asm.mixin.Mixin;
@@ -18,6 +15,7 @@ public class CommandManagerMixin extends CommandRegistry {
         registerCommand(new CameraCommand());
         registerCommand(new LogCommand());
         registerCommand(new PlayerCommand());
+        registerCommand(new SpawnChunksCommand());
         registerCommand(new TickCommand());
     }
 }
