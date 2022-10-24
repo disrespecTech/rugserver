@@ -2,6 +2,7 @@ package github.totorewa.rugserver.mixin.feature.cameramode;
 
 import com.google.common.collect.Sets;
 import com.mojang.authlib.GameProfile;
+import github.totorewa.rugserver.RugSettings;
 import github.totorewa.rugserver.fake.PlayerCameraHandler;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.damage.DamageSource;
@@ -137,7 +138,8 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements Pl
             return "player does not exist in world";
         if (getHealth() == 0.0f)
             return "player is dead";
-        if (lastDamageTick != 0 && lastDamageTick > (server.getTicks() - CAMERA_DAMAGE_COOLDOWN))
+        if (!RugSettings.cameraModeDisableDamageCooldown.isEnabled(this) && lastDamageTick != 0 &&
+                lastDamageTick > (server.getTicks() - CAMERA_DAMAGE_COOLDOWN))
             return "player took damage too recently";
         return null;
     }

@@ -2,6 +2,7 @@ package github.totorewa.rugserver;
 
 import github.totorewa.rugserver.logging.FooterController;
 import github.totorewa.rugserver.logging.InfoLogger;
+import github.totorewa.rugserver.settings.SettingsManager;
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.world.ServerWorld;
@@ -12,11 +13,12 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public class RugServerMod implements ModInitializer, Tickable {
     public static RugServerMod mod;
     public MinecraftServer server;
-    public boolean creativeEnabled;
 
     @Override
     public void onInitialize() {
         mod = this;
+        MinecraftServer.getServer().addTickable(this);
+        InfoLogger.registerLoggers();
     }
 
     @Override
@@ -32,8 +34,9 @@ public class RugServerMod implements ModInitializer, Tickable {
 
     public void onServerSetup(MinecraftServer server) {
         this.server = server;
+        SettingsManager.initialize(server);
+        SettingsManager.register(RugSettings.class);
         server.addTickable(this);
         InfoLogger.registerLoggers();
-        creativeEnabled = !server.getDefaultGameMode().isSurvivalLike();
     }
 }

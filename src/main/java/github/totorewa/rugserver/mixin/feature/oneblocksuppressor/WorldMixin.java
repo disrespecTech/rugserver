@@ -1,6 +1,6 @@
 package github.totorewa.rugserver.mixin.feature.oneblocksuppressor;
 
-import github.totorewa.rugserver.RugServerMod;
+import github.totorewa.rugserver.RugSettings;
 import github.totorewa.rugserver.fake.IUpdateSuppression;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -47,7 +47,7 @@ public class WorldMixin implements IUpdateSuppression {
     }
 
     private boolean shouldSuppressUpdate(Block block) {
-        if (RugServerMod.mod.creativeEnabled && (Object) this instanceof ServerWorld) {
+        if (RugSettings.barrierBlockSuppressesUpdates && (Object) this instanceof ServerWorld) {
             int tick = ((ServerWorld) (Object) this).getServer().getTicks();
             if (block == Blocks.BARRIER) {
                 updateSuppressionTick = tick;
@@ -60,14 +60,14 @@ public class WorldMixin implements IUpdateSuppression {
 
     @Override
     public void suppressTick() {
-        if (RugServerMod.mod.creativeEnabled && (Object) this instanceof ServerWorld) {
+        if (RugSettings.barrierBlockSuppressesUpdates && (Object) this instanceof ServerWorld) {
             updateSuppressionTick = ((ServerWorld) (Object) this).getServer().getTicks();
         }
     }
 
     @Override
     public boolean isSuppressionActive() {
-        return RugServerMod.mod.creativeEnabled && (Object) this instanceof ServerWorld &&
+        return RugSettings.barrierBlockSuppressesUpdates && (Object) this instanceof ServerWorld &&
                 updateSuppressionTick == ((ServerWorld) (Object) this).getServer().getTicks();
     }
 }

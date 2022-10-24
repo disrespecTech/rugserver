@@ -1,12 +1,10 @@
 package github.totorewa.rugserver.command;
 
 import com.google.common.collect.Lists;
+import github.totorewa.rugserver.RugSettings;
 import github.totorewa.rugserver.feature.player.FakePlayerManager;
 import github.totorewa.rugserver.util.message.Message;
-import net.minecraft.command.AbstractCommand;
-import net.minecraft.command.CommandException;
-import net.minecraft.command.CommandSource;
-import net.minecraft.command.SyntaxException;
+import net.minecraft.command.*;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.server.MinecraftServer;
@@ -17,11 +15,7 @@ import net.minecraft.world.World;
 import java.util.Arrays;
 import java.util.List;
 
-public class PlayerCommand extends AbstractCommand {
-    public PlayerCommand() {
-        ModCommandRegistry.register(this);
-    }
-
+public class PlayerCommand extends AbstractRugCommand {
     @Override
     public String getCommandName() {
         return "player";
@@ -29,12 +23,17 @@ public class PlayerCommand extends AbstractCommand {
 
     @Override
     public String getUsageTranslationKey(CommandSource source) {
-        return "player";
+        return "/player <username> <spawn/kill/shadow>";
+    }
+
+    @Override
+    protected boolean isEnabled(CommandSource source) {
+        return RugSettings.commandPlayer.isEnabled(source);
     }
 
     @Override
     public void execute(CommandSource source, String[] args) throws CommandException {
-        if (args.length <= 1 || args[0].isEmpty()) throw new SyntaxException();
+        if (args.length <= 1 || args[0].isEmpty()) throw new IncorrectUsageException(getUsageTranslationKey(source));
 
         String username = args[0];
         String action = args[1];

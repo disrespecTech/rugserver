@@ -1,5 +1,6 @@
 package github.totorewa.rugserver.mixin.feature.carefulbreak;
 
+import github.totorewa.rugserver.RugSettings;
 import github.totorewa.rugserver.feature.carefulbreak.CarefulBreakManager;
 import github.totorewa.rugserver.logging.InfoLogger;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -18,7 +19,7 @@ public class ServerPlayerInteractionManagerMixin {
 
     @Inject(method = "method_10766", at = @At("HEAD"))
     private void beforeBlockBreak(BlockPos pos, CallbackInfoReturnable<Boolean> cir) {
-        if (InfoLogger.getLogger("carefulBreak").isLogging(player.getGameProfile().getName()) && player.isSneaking())
+        if (RugSettings.carefulBreak && InfoLogger.getLogger("carefulBreak").isLogging(player.getGameProfile().getName()) && player.isSneaking())
             CarefulBreakManager.INSTANCE.carefulBreak(player, pos);
     }
 

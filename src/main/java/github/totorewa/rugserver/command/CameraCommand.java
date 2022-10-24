@@ -1,16 +1,15 @@
 package github.totorewa.rugserver.command;
 
+import github.totorewa.rugserver.RugSettings;
 import github.totorewa.rugserver.fake.PlayerCameraHandler;
 import github.totorewa.rugserver.util.message.Message;
-import net.minecraft.command.*;
+import net.minecraft.command.AbstractCommand;
+import net.minecraft.command.CommandException;
+import net.minecraft.command.CommandSource;
+import net.minecraft.command.PlayerNotFoundException;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.server.command.CloneCommand;
 
-public class CameraCommand extends AbstractCommand {
-    public CameraCommand() {
-        ModCommandRegistry.register(this);
-    }
-
+public class CameraCommand extends AbstractRugCommand {
     @Override
     public String getCommandName() {
         return "cs";
@@ -18,7 +17,12 @@ public class CameraCommand extends AbstractCommand {
 
     @Override
     public String getUsageTranslationKey(CommandSource source) {
-        return "cs";
+        return "/cs";
+    }
+
+    @Override
+    protected boolean isEnabled(CommandSource source) {
+        return RugSettings.commandCamera.isEnabled(source);
     }
 
     @Override
