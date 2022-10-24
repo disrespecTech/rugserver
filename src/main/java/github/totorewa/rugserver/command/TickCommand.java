@@ -25,7 +25,7 @@ public class TickCommand extends AbstractRugCommand {
 
     @Override
     public String getUsageTranslationKey(CommandSource source) {
-        return "tick";
+        return "/tick rate [rate]";
     }
 
     @Override

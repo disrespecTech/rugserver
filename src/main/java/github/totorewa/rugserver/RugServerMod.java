@@ -34,6 +34,7 @@ public class RugServerMod implements ModInitializer, Tickable {
 
     public void onServerSetup(MinecraftServer server) {
         this.server = server;
+        SettingsManager.initialize(server);
         SettingsManager.register(RugSettings.class);
         server.addTickable(this);
         InfoLogger.registerLoggers();

@@ -6,7 +6,7 @@ import net.minecraft.command.CommandSource;
 public abstract class AbstractRugCommand extends AbstractCommand {
     @Override
     public boolean isAccessible(CommandSource source) {
-        return isEnabled(source) || super.isAccessible(source);
+        return isEnabled(source);
     }
 
     protected boolean isEnabled(CommandSource source) {

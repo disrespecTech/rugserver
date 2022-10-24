@@ -4,10 +4,7 @@ import com.google.common.collect.Lists;
 import github.totorewa.rugserver.RugSettings;
 import github.totorewa.rugserver.feature.player.FakePlayerManager;
 import github.totorewa.rugserver.util.message.Message;
-import net.minecraft.command.AbstractCommand;
-import net.minecraft.command.CommandException;
-import net.minecraft.command.CommandSource;
-import net.minecraft.command.SyntaxException;
+import net.minecraft.command.*;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.server.MinecraftServer;
@@ -26,7 +23,7 @@ public class PlayerCommand extends AbstractRugCommand {
 
     @Override
     public String getUsageTranslationKey(CommandSource source) {
-        return "player";
+        return "/player <username> <spawn/kill/shadow>";
     }
 
     @Override
@@ -36,7 +33,7 @@ public class PlayerCommand extends AbstractRugCommand {
 
     @Override
     public void execute(CommandSource source, String[] args) throws CommandException {
-        if (args.length <= 1 || args[0].isEmpty()) throw new SyntaxException();
+        if (args.length <= 1 || args[0].isEmpty()) throw new IncorrectUsageException(getUsageTranslationKey(source));
 
         String username = args[0];
         String action = args[1];

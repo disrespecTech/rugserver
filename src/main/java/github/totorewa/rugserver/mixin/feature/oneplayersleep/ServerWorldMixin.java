@@ -66,15 +66,12 @@ public abstract class ServerWorldMixin extends World {
                         sleepCount++;
                 }
             }
-            if (RugSettings.sleepPercentage == 100) {
-                ready = sleepCount >= playerCount;
-                return;
-            }
             requiredSleepCount = (int) ((float) playerCount * ((float) RugSettings.sleepPercentage / 100.0f));
             if (sleepCount >= requiredSleepCount) {
                 announceSleepRequirement = false;
                 ready = true;
-            } else announceSleepRequirement = true;
+            } else
+                announceSleepRequirement = sleepCount > 0;
         }
     }
 
@@ -84,11 +81,9 @@ public abstract class ServerWorldMixin extends World {
      */
     @Overwrite
     public boolean isReady() {
-        boolean defaultValue = RugSettings.sleepPercentage > 0;
-
         if (!isClient && announceSleepRequirement && server.getTicks() % 20 == 0) {
             announceSleepRequirement = false;
-            Text message = new Message("Players wish to skip the night.", Message.YELLOW)
+            Text message = new Message("Players wish to skip the night. ", Message.YELLOW)
                     .add(String.valueOf(sleepCount), Message.GOLD)
                     .add(" of the required ", Message.YELLOW)
                     .add(String.valueOf(requiredSleepCount), Message.GOLD)
@@ -102,6 +97,7 @@ public abstract class ServerWorldMixin extends World {
         }
 
         if (ready && !isClient) {
+            boolean defaultValue = RugSettings.sleepPercentage > 0;
             for (PlayerEntity player : playerEntities) {
                 if (player.isSleepingLongEnough()) {
                     if (!defaultValue) {
@@ -114,9 +110,10 @@ public abstract class ServerWorldMixin extends World {
                         player.isSleeping())
                     return false;
             }
+            return defaultValue;
         }
 
-        return defaultValue;
+        return false;
     }
 
     @Inject(method = "method_2141", at = @At("RETURN"))

@@ -7,13 +7,19 @@ import github.totorewa.rugserver.util.message.Message;
 import net.minecraft.command.AbstractCommand;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.CommandSource;
+import net.minecraft.command.IncorrectUsageException;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.server.OperatorEntry;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.text.ClickEvent;
+import net.minecraft.text.HoverEvent;
+import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 public class RugCommand extends AbstractRugCommand {
     @Override
@@ -23,7 +29,7 @@ public class RugCommand extends AbstractRugCommand {
 
     @Override
     public String getUsageTranslationKey(CommandSource source) {
-        return "rug";
+        return "/rug [rule] [value] OR /rug setDefault <rule> [value]";
     }
 
     @Override
@@ -63,8 +69,32 @@ public class RugCommand extends AbstractRugCommand {
         }
 
         String value = args[1];
-        if (args.length == 2 && SettingsManager.setRule(source, ruleName, value))
-            AbstractCommand.run(source, this, String.format("Rule %s updated to %s", ruleName, value));
+        if (args.length == 2) {
+            if (ruleName.equals("setDefault")) {
+                SettingsManager.removeDefault(source, value);
+                AbstractCommand.run(source, this, String.format("Removed default value for rule %s", value));
+            } else if (SettingsManager.setRule(source, ruleName, value)) {
+                String msg = String.format("Rule %s updated to %s", ruleName, value);
+                AbstractCommand.run(source, this, 1, msg);
+                Text text = new Message(msg, Message.WHITE).toText();
+                Text commandShortcut = new Message(" [Change permanently?]", Message.AQUA).toText();
+                commandShortcut.getStyle()
+                        .setClickEvent(
+                                new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND,
+                                        String.format("/rug setDefault %s %s", ruleName, value)))
+                        .setHoverEvent(
+                                new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+                                        Message.createComponent("click to keep the settings in rug.conf across restarts")));
+                source.sendMessage(text.append(commandShortcut));
+            }
+        } else if (args.length == 3 && ruleName.equals("setDefault")) {
+            ruleName = value;
+            value = args[2];
+            if (SettingsManager.setDefaultRule(source, ruleName, value))
+                AbstractCommand.run(source, this, String.format("Rule %s will now default to %s", ruleName, value));
+        } else {
+            throw new IncorrectUsageException("/rug <rule> <value>");
+        }
     }
 
     @Override
@@ -93,14 +123,17 @@ public class RugCommand extends AbstractRugCommand {
     }
 
     private void listSettings(CommandSource source) {
-        Message message = new Message("Current Rug settings:\n", Message.WHITE | Message.BOLD);
-        for (String ruleName : SettingsManager.getRuleNames()) {
+        Message message = new Message("\nCurrent Rug settings:\n", Message.WHITE | Message.BOLD);
+        List<String> ruleNames = StreamSupport.stream(SettingsManager.getRuleNames().spliterator(), false).sorted().collect(Collectors.toList());
+        for (String ruleName : ruleNames) {
             RugRule<?> rule = SettingsManager.getRule(ruleName);
             if (rule == null) continue;
             String value = rule.read();
             if (value != null)
                 message.add(String.format("\n%s ", ruleName), Message.RESET | Message.WHITE)
-                        .add(String.format("%s", value), Message.UNDERLINE | (rule.defaultValue.equals(rule.current()) ? Message.GRAY | Message.BOLD : Message.YELLOW));
+                        .add(String.format("%s", value),
+                                (rule.getDefault().equals(rule.current()) ?
+                                        (rule.hasDefaultChanged() ? Message.GREEN : Message.GRAY) : Message.YELLOW));
         }
         source.sendMessage(message.toText());
         AbstractCommand.run(source, this, 1, "Current Rug settings");
@@ -115,7 +148,12 @@ public class RugCommand extends AbstractRugCommand {
 
         Message message = new Message("\n");
         message.add(String.format("%s\n", rule.name), Message.WHITE | Message.BOLD);
-        message.add(String.format("%s\nTags:", rule.ruleMeta.desc()), Message.RESET | Message.WHITE);
+        message.add(String.format("%s\n", rule.ruleMeta.desc()), Message.RESET | Message.WHITE);
+        if (rule.ruleMeta.remarks().length > 0) {
+            for (String remark : rule.ruleMeta.remarks())
+                message.add(String.format("%s\n", remark), Message.GRAY);
+        }
+        message.add("Tags:", Message.RESET | Message.WHITE);
         for (String cat : rule.ruleMeta.categories())
             message.add(String.format(" [%s]", cat), Message.AQUA);
 
@@ -123,7 +161,7 @@ public class RugCommand extends AbstractRugCommand {
         String value = rule.read();
         if (value != null) {
             message.add("\nCurrent value: ", Message.RESET | Message.WHITE);
-            isDefault = rule.current().equals(rule.defaultValue);
+            isDefault = rule.current().equals(rule.getInitial());
             if (isDefault)
                 message.add(String.format("%s (default value)", value), Message.DARK_RED | Message.BOLD);
             else

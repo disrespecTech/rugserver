@@ -17,7 +17,7 @@ public class CameraCommand extends AbstractRugCommand {
 
     @Override
     public String getUsageTranslationKey(CommandSource source) {
-        return "cs";
+        return "/cs";
     }
 
     @Override

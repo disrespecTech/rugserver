@@ -12,17 +12,19 @@ import java.util.List;
 
 public class RugRule<E> {
     private final Field field;
+    private final E initialValue;
+    private E defaultValue;
     private Parser<E> parser;
     private final List<Validator<E>> validators = Lists.newArrayList();
     public final Rule ruleMeta;
     public final String name;
-    public final E defaultValue;
     public final List<String> options = Lists.newArrayList();
 
     public RugRule(Class<E> clazz, Field field) throws IllegalAccessException, NoSuchMethodException, InvocationTargetException, InstantiationException {
         name = field.getName();
         this.field = field;
-        defaultValue = (E) field.get(null);
+        initialValue = (E) field.get(null);
+        defaultValue = initialValue;
 
         ruleMeta = field.getAnnotation(Rule.class);
         for (Class<? extends Validator> validatorClass : ruleMeta.validator()) {
@@ -48,7 +50,20 @@ public class RugRule<E> {
         return defaultValue;
     }
 
+    public E getDefault() {
+        return defaultValue;
+    }
+
+    public E getInitial() {
+        return initialValue;
+    }
+
+    public boolean hasDefaultChanged() {
+        return !initialValue.equals(defaultValue);
+    }
+
     public String write(String value) {
+        if (!isValid(value)) return String.format("Unable to set %s to value %s", name, value);
         ResultOrError<E> parsed = parser.parseValue(value);
         if (parsed.hasError()) return parsed.getError();
         try {
@@ -63,5 +78,31 @@ public class RugRule<E> {
 
     public String read() {
         return parser.asString(current());
+    }
+
+    public String writeDefault(String value) {
+        if (!isValid(value)) return String.format("Unable to set %s default value to %s", name, value);
+        ResultOrError<E> parsed = parser.parseValue(value);
+        if (parsed.hasError()) return parsed.getError();
+        defaultValue = (E) parsed.get();
+        return null;
+    }
+
+
+    public String readDefault() {
+        return parser.asString(defaultValue);
+    }
+
+    public void resetDefault() {
+        defaultValue = initialValue;
+    }
+
+    private boolean isValid(String value) {
+        if (!ruleMeta.strict() || options.isEmpty()) return true;
+        for (String opt : options) {
+            if (opt.equals(value))
+                return true;
+        }
+        return false;
     }
 }

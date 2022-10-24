@@ -119,6 +119,7 @@ public class InfoLogger {
     }
 
     public static InfoLogger getLogger(String name) {
-        return loggers.get(name);
+        InfoLogger logger = loggers.get(name);
+        return logger == null || !logger.isEnabled() ? null : logger;
     }
 }
