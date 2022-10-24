@@ -15,7 +15,7 @@ public class CommandManagerMixin extends CommandRegistry {
         registerCommand(new CameraCommand());
         registerCommand(new LogCommand());
         registerCommand(new PlayerCommand());
-        registerCommand(new SpawnChunksCommand());
+        registerCommand(new RugCommand());
         registerCommand(new TickCommand());
     }
 }

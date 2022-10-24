@@ -2,6 +2,7 @@ package github.totorewa.rugserver;
 
 import github.totorewa.rugserver.logging.FooterController;
 import github.totorewa.rugserver.logging.InfoLogger;
+import github.totorewa.rugserver.settings.SettingsManager;
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.world.ServerWorld;
@@ -16,6 +17,8 @@ public class RugServerMod implements ModInitializer, Tickable {
     @Override
     public void onInitialize() {
         mod = this;
+        MinecraftServer.getServer().addTickable(this);
+        InfoLogger.registerLoggers();
     }
 
     @Override
@@ -31,6 +34,7 @@ public class RugServerMod implements ModInitializer, Tickable {
 
     public void onServerSetup(MinecraftServer server) {
         this.server = server;
+        SettingsManager.register(RugSettings.class);
         server.addTickable(this);
         InfoLogger.registerLoggers();
     }

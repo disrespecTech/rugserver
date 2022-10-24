@@ -2,6 +2,7 @@ package github.totorewa.rugserver.command;
 
 import github.totorewa.rugserver.logging.InfoLogger;
 import github.totorewa.rugserver.util.message.Message;
+import net.minecraft.command.AbstractCommand;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.SyntaxException;

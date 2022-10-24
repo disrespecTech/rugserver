@@ -1,6 +1,7 @@
 package github.totorewa.rugserver.command;
 
 import com.google.common.collect.Lists;
+import github.totorewa.rugserver.RugSettings;
 import github.totorewa.rugserver.feature.player.FakePlayerManager;
 import github.totorewa.rugserver.helper.TickHelper;
 import github.totorewa.rugserver.util.message.Message;
@@ -25,6 +26,11 @@ public class TickCommand extends AbstractRugCommand {
     @Override
     public String getUsageTranslationKey(CommandSource source) {
         return "tick";
+    }
+
+    @Override
+    protected boolean isEnabled(CommandSource source) {
+        return RugSettings.commandTick.isEnabled(source);
     }
 
     @Override

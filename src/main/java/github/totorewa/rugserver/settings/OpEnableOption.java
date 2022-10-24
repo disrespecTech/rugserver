@@ -1,4 +1,4 @@
-package github.totorewa.rugserver.util.settings;
+package github.totorewa.rugserver.settings;
 
 import net.minecraft.command.CommandSource;
 import net.minecraft.entity.Entity;
@@ -9,6 +9,7 @@ public enum OpEnableOption {
     TRUE("true", false, false),
     OP("op", false, true);
 
+    @EnumValue
     public final String key;
     private final boolean disabled;
     private final boolean opOnly;

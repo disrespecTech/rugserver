@@ -40,6 +40,12 @@ public class FakePlayerManager {
         return player instanceof FakeServerPlayerEntity ? (FakeServerPlayerEntity) player : null;
     }
 
+    public void purge() {
+        for (FakeServerPlayerEntity player : getFakePlayers()) {
+            player.logout();
+        }
+    }
+
     public boolean spawnFake(final String name, final ServerPlayerEntity spawner) {
         // Get profile by username
         GameProfile profile = server.getUserCache().findByName(name);
