@@ -54,6 +54,9 @@ public class RugSettings {
             options = {"0", "25", "50", "75", "100"})
     public static int sleepPercentage = 100;
 
+    @Rule(desc = "Disables pick-up cooldown for XP orbs", categories = {SURVIVAL})
+    public static boolean xpNoCooldown = false;
+
     public static class HandlePlayerChange implements Validator<OpEnableOption> {
         @Override
         public OpEnableOption validate(CommandSource source, RugRule<OpEnableOption> rule, OpEnableOption parsedValue, String rawValue) {

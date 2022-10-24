@@ -26,7 +26,8 @@
     "feature.fill.FillCommandMixin",
     "feature.fill.SetBlockCommandMixin",
     "feature.fill.WorldMixin",
-    "feature.oneblocksuppressor.WorldMixin"
+    "feature.oneblocksuppressor.WorldMixin",
+    "feature.xpcooldown.ExperienceOrbEntityMixin"
   ],
   "injectors": {
     "defaultRequire": 1
