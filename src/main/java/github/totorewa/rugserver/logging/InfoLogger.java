@@ -53,6 +53,10 @@ public class InfoLogger {
         return true;
     }
 
+    public Iterable<String> getNamesForSubscribedPlayers() {
+        return entitiesLogging;
+    }
+
     public void initialize() {
     }
 

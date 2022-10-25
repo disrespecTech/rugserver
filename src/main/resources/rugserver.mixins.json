@@ -30,7 +30,8 @@
     "feature.mobspawnnearplayer.MobEntityMixin",
     "feature.mobspawnnearplayer.MobSpawnerHelperMixin",
     "feature.oneblocksuppressor.WorldMixin",
-    "feature.xpcooldown.ExperienceOrbEntityMixin"
+    "feature.xpcooldown.ExperienceOrbEntityMixin",
+    "logging.MinecraftServerMixin"
   ],
   "injectors": {
     "defaultRequire": 1
