@@ -27,6 +27,8 @@
     "feature.fill.FillCommandMixin",
     "feature.fill.SetBlockCommandMixin",
     "feature.fill.WorldMixin",
+    "feature.mobspawnnearplayer.MobEntityMixin",
+    "feature.mobspawnnearplayer.MobSpawnerHelperMixin",
     "feature.oneblocksuppressor.WorldMixin",
     "feature.xpcooldown.ExperienceOrbEntityMixin"
   ],

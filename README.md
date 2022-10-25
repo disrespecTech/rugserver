@@ -70,7 +70,7 @@ Enables `/tick` for tick manipulation
 * Type: `enum`
 * Default value: `op`
 * Required options: `true`, `false`, `op`
-* Categories: `COMMAND`, `CREATIVE`, `FEATURE`
+* Categories: `COMMAND`, `CREATIVE`
 
 ### fillLimit
 Specify the block limit for `/clone` and `/fill`

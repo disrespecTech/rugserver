@@ -9,7 +9,7 @@ import net.minecraft.command.CommandSource;
 import net.minecraft.server.world.ServerWorld;
 
 public class RugSettings {
-    public static final String COMMAND = "feature";
+    public static final String COMMAND = "command";
     public static final String CREATIVE = "creative";
     public static final String EXPERIMENTAL = "experimental";
     public static final String FEATURE = "feature";
@@ -40,7 +40,7 @@ public class RugSettings {
             validator = HandlePlayerChange.class)
     public static OpEnableOption commandPlayer = OpEnableOption.FALSE;
 
-    @Rule(desc = "Enables /tick for tick manipulation", categories = {FEATURE, COMMAND, SURVIVAL})
+    @Rule(desc = "Enables /tick for tick manipulation", categories = {COMMAND, CREATIVE})
     public static OpEnableOption commandTick = OpEnableOption.OP;
 
     @Rule(desc = "Disables enderman griefing (i.e. block pick-up)", categories = {SURVIVAL})
@@ -51,6 +51,9 @@ public class RugSettings {
 
     @Rule(desc = "Disables neighboring block updates when using /clone, /fill, and /setblock", categories = {CREATIVE})
     public static boolean fillUpdates = true;
+
+    @Rule(desc = "Prevent mobs spawning if it were to immediately despawn", categories = {EXPERIMENTAL, SURVIVAL})
+    public static boolean mobsOnlySpawnNearPlayers = false;
 
     @Rule(
             desc = "Percentage of players required to sleep to skip the night", categories = {FEATURE, SURVIVAL},
