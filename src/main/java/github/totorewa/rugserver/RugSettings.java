@@ -43,6 +43,9 @@ public class RugSettings {
     @Rule(desc = "Enables /tick for tick manipulation", categories = {FEATURE, COMMAND, SURVIVAL})
     public static OpEnableOption commandTick = OpEnableOption.OP;
 
+    @Rule(desc = "Disables enderman griefing (i.e. block pick-up)", categories = {SURVIVAL})
+    public static boolean endermanNoGriefing = false;
+
     @Rule(desc = "Specify the block limit for /clone and /fill", categories = {CREATIVE})
     public static int fillLimit = 32768;
 

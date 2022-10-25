@@ -21,6 +21,7 @@
     "logging.ServerWorldAccessor"
   ],
   "mixins": [
+    "feature.endermangriefing.PickUpBlockGoalMixin",
     "feature.fill.ChunkMixin",
     "feature.fill.CloneCommandMixin",
     "feature.fill.FillCommandMixin",
