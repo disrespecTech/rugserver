@@ -11,8 +11,8 @@
     "feature.carefulbreak.BlockMixin",
     "feature.carefulbreak.ServerPlayerInteractionManagerMixin",
     "feature.oneplayersleep.ServerWorldMixin",
-    "feature.player.PlayerManagerMixin",
     "feature.player.LivingEntityMixin",
+    "feature.player.PlayerManagerMixin",
     "feature.tick.MinecraftServerMixin",
     "lifecycle.MinecraftDedicatedServerMixin_startup",
     "logging.MobSpawnerHelperAccessor",
@@ -29,6 +29,7 @@
     "feature.fill.WorldMixin",
     "feature.mobspawnnearplayer.MobEntityMixin",
     "feature.mobspawnnearplayer.MobSpawnerHelperMixin",
+    "feature.noendcredits.ServerPlayerEntityMixin",
     "feature.oneblocksuppressor.WorldMixin",
     "feature.xpcooldown.ExperienceOrbEntityMixin",
     "logging.MinecraftServerMixin"

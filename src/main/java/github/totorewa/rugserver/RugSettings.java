@@ -52,6 +52,9 @@ public class RugSettings {
     @Rule(desc = "Disables neighboring block updates when using /clone, /fill, and /setblock", categories = {CREATIVE})
     public static boolean fillUpdates = true;
 
+    @Rule(desc = "Skip the end credits when leaving The End", categories = {SURVIVAL})
+    public static boolean noEndCredits = false;
+
     @Rule(desc = "Prevent mobs spawning if it were to immediately despawn", categories = {EXPERIMENTAL, SURVIVAL})
     public static boolean mobsOnlySpawnNearPlayers = false;
 
