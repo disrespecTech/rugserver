@@ -32,7 +32,17 @@
     "feature.noendcredits.ServerPlayerEntityMixin",
     "feature.oneblocksuppressor.WorldMixin",
     "feature.xpcooldown.ExperienceOrbEntityMixin",
-    "logging.MinecraftServerMixin"
+    "logging.MinecraftServerMixin",
+    "perf.directions.AbstractRedstoneGateBlockMixin",
+    "perf.directions.BlockPatternMixin",
+    "perf.directions.DirectionMixin",
+    "perf.directions.DirectionTypeMixin",
+    "perf.directions.FireBlockMixin",
+    "perf.directions.FluidBlockMixin",
+    "perf.directions.NetherPortalBlockMixin",
+    "perf.directions.PistonBlockMixin",
+    "perf.directions.RedstoneWireBlockMixin",
+    "perf.directions.SpongeBlockMixin"
   ],
   "injectors": {
     "defaultRequire": 1
