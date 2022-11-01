@@ -2,6 +2,7 @@ package github.totorewa.rugserver.feature.player;
 
 import com.mojang.authlib.GameProfile;
 import github.totorewa.rugserver.util.message.Message;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.server.MinecraftServer;
@@ -54,6 +55,7 @@ public class FakeServerPlayerEntity extends ServerPlayerEntity {
     }
 
     public void logout() {
+        dismountAll();
         networkHandler.onDisconnected(new LiteralText("Bot killed"));
     }
 
@@ -62,5 +64,13 @@ public class FakeServerPlayerEntity extends ServerPlayerEntity {
         return new Message(isShadow ? "[Shadow] " : "[Bot] ", Message.ITALIC | (isShadow ? Message.DARK_GRAY : Message.GRAY))
                 .add(getGameProfile().getName(), Message.GRAY)
                 .toText();
+    }
+
+    private void dismountAll() {
+        if (vehicle != null) startRiding(null);
+        Entity rider = this;
+        while ((rider = rider.rider) != null) {
+            rider.startRiding(null);
+        }
     }
 }

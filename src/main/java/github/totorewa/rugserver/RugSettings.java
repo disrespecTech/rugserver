@@ -1,10 +1,7 @@
 package github.totorewa.rugserver;
 
 import github.totorewa.rugserver.feature.player.FakePlayerManager;
-import github.totorewa.rugserver.settings.OpEnableOption;
-import github.totorewa.rugserver.settings.RugRule;
-import github.totorewa.rugserver.settings.Rule;
-import github.totorewa.rugserver.settings.Validator;
+import github.totorewa.rugserver.settings.*;
 import net.minecraft.command.CommandSource;
 import net.minecraft.server.world.ServerWorld;
 
@@ -23,6 +20,11 @@ public class RugSettings {
 
     @Rule(desc = "Barrier block will suppress any further neighboring block updates", categories = {CREATIVE})
     public static boolean barrierBlockSuppressesUpdates = false;
+
+    @Rule(
+            desc = "Bots can drop all its experience on the ground", categories = {SURVIVAL},
+            remarks = "When set to limited, bots only drop the amount they would have if they'd died")
+    public static BotExperienceDropType botsCanDropXp = BotExperienceDropType.NONE;
 
     @Rule(desc = "Allows entering camera mode even if damage was taken recently", categories = {SURVIVAL})
     public static OpEnableOption cameraModeDisableDamageCooldown = OpEnableOption.FALSE;
@@ -81,6 +83,18 @@ public class RugSettings {
         @Override
         public String errorDescription() {
             return null;
+        }
+    }
+
+    public enum BotExperienceDropType {
+        NONE("false"),
+        LIMITED("limited"),
+        ALL("true");
+        @EnumValue
+        public final String key;
+
+        BotExperienceDropType(String key) {
+            this.key = key;
         }
     }
 }

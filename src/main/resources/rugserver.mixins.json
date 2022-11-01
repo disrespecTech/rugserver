@@ -31,6 +31,7 @@
     "feature.mobspawnnearplayer.MobSpawnerHelperMixin",
     "feature.noendcredits.ServerPlayerEntityMixin",
     "feature.oneblocksuppressor.WorldMixin",
+    "feature.player.ServerPlayerEntityMixin",
     "feature.xpcooldown.ExperienceOrbEntityMixin",
     "logging.MinecraftServerMixin"
   ],
