@@ -73,6 +73,9 @@ public class RugSettings {
     @Rule(desc = "Prevent mobs spawning if it were to immediately despawn", categories = {EXPERIMENTAL, SURVIVAL})
     public static boolean mobsOnlySpawnNearPlayers = false;
 
+    @Rule(desc = "Disable /tp when an operator is in survival mode", categories = {SURVIVAL})
+    public static boolean opNoCheating = false;
+
     @Rule(desc = "Save log subscriptions to disk and load on start-up", categories = {CREATIVE, SURVIVAL})
     public static boolean persistLogSubscriptions = false;
 
