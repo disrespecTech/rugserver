@@ -4,7 +4,6 @@ import github.totorewa.rugserver.RugSettings;
 import github.totorewa.rugserver.util.message.Message;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.EntityNotFoundException;
-import net.minecraft.command.PlayerNotFoundException;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.server.command.TeleportCommand;
@@ -16,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(TeleportCommand.class)
 public class TeleportCommandMixin {
     @Inject(method = "execute", at = @At("HEAD"), cancellable = true)
-    private void checkEntity(CommandSource source, String[] args, CallbackInfo ci) throws EntityNotFoundException, PlayerNotFoundException {
+    private void checkEntity(CommandSource source, String[] args, CallbackInfo ci) throws EntityNotFoundException {
         if (RugSettings.opNoCheating) {
             Entity entity = source.getEntity();
             if (entity instanceof ServerPlayerEntity && ((ServerPlayerEntity) entity).interactionManager.getGameMode().isSurvivalLike()) {
