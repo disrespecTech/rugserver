@@ -19,11 +19,7 @@ public class PlayerAttackAction implements PlayerAction {
     }
 
     private void handleBlockHit(PlayerController ctrl, BlockHitResult hit) {
-        if (ctrl.miningCooldown > 0) {
-            ctrl.miningCooldown--;
-            return;
-        }
-
+        if (ctrl.miningCooldown > 0) return;
         BlockPos pos = hit.getBlockPos();
         BlockState state = ctrl.player.world.getBlockState(pos);
         if (Blocks.AIR.isEqualTo(state.getBlock())) {
@@ -54,17 +50,14 @@ public class PlayerAttackAction implements PlayerAction {
                 ctrl.enterMiningCooldown();
             }
         }
-        ctrl.player.swingHand();
+        ctrl.swingHand();
     }
 
     private void handleEntityHit(PlayerController ctrl, BlockHitResult hit, boolean continuous) {
-        if (ctrl.attackCooldown > 0) {
-            ctrl.attackCooldown--;
-            return;
-        }
+        if (ctrl.attackCooldown > 0) return;
         if (!continuous) {
             ctrl.player.method_3216(hit.entity);
-            ctrl.player.swingHand();
+            ctrl.swingHand();
         }
         ctrl.enterAttackCooldown();
     }

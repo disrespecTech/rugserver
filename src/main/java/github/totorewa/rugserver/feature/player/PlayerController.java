@@ -15,39 +15,44 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.entity.vehicle.BoatEntity;
 import net.minecraft.entity.vehicle.MinecartEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.packet.s2c.play.EntityAnimationS2CPacket;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class PlayerController {
-    private Map<Integer, ActionAttachment> attachmentMap = Maps.newHashMap();
-    private Set<ActionAttachment> attachments = Sets.newHashSet();
+    private final Map<Integer, ActionAttachment> attachmentMap = Maps.newHashMap();
+    private final Set<ActionAttachment> attachments = Sets.newHashSet();
     public final ServerPlayerEntity player;
+    public final boolean isFakePlayer;
+    public final Random random = new Random();
     public int attackCooldown;
     public int miningCooldown;
+    public int useCooldown;
+    public int eatCooldown;
     public BlockPos miningPos;
     public int miningTick;
 
     public PlayerController(ServerPlayerEntity player) {
         this.player = player;
+        isFakePlayer = player instanceof FakeServerPlayerEntity;
     }
 
     public void tick() {
-        if (player.isSpectator()) return;
-        List<ActionAttachment> removed = new ArrayList<>(attachments.size());
-        for (ActionAttachment attachment : attachments) {
-            attachment.tick(this);
-            if (attachment.isFinished())
-                removed.add(attachment);
+        if (!player.isSpectator()) {
+            List<ActionAttachment> removed = new ArrayList<>(attachments.size());
+            for (ActionAttachment attachment : attachments) {
+                attachment.tick(this);
+                if (attachment.isFinished())
+                    removed.add(attachment);
+            }
+            removed.forEach(a -> {
+                attachments.remove(a);
+                attachmentMap.remove(a.actionType.ordinal(), a);
+            });
         }
-        removed.forEach(a -> {
-            attachments.remove(a);
-            attachmentMap.remove(a.actionType.ordinal(), a);
-        });
+        tickCooldown();
     }
 
     public void addAttachment(ActionAttachment attachment) {
@@ -71,7 +76,7 @@ public class PlayerController {
 
     public boolean mountNearbyVehicle() {
         Vec3d cameraPos = RayTraceHelper.getCameraPos(player);
-        double reach = getMaxReach();
+        double reach = getMaxEntityReach();
         List<Entity> vehicles = player.world.getEntitiesIn(
                 player, player.getBoundingBox().expand(reach, reach, reach),
                 e -> (e instanceof MinecartEntity || e instanceof BoatEntity || e instanceof HorseBaseEntity ||
@@ -135,9 +140,9 @@ public class PlayerController {
     }
 
     public void dumpExperience() {
-        if (RugSettings.botsCanDropXp == RugSettings.BotExperienceDropType.NONE) return;
+        if (RugSettings.allowXpDumping == RugSettings.BotExperienceDropType.NONE) return;
         int xpToDrop;
-        if (RugSettings.botsCanDropXp == RugSettings.BotExperienceDropType.LIMITED) {
+        if (RugSettings.allowXpDumping == RugSettings.BotExperienceDropType.LIMITED) {
             xpToDrop = player.experienceLevel * 7;
             if (xpToDrop > 100) xpToDrop = 100;
         } else xpToDrop = ExperienceHelper.getExperience(player.experienceLevel, player.experienceProgress);
@@ -150,17 +155,62 @@ public class PlayerController {
         }
     }
 
+    public void swingHand() {
+        if (!isFakePlayer && player.networkHandler != null) {
+            player.swingHand();
+            player.networkHandler.sendPacket(new EntityAnimationS2CPacket(player, 0));
+        }
+    }
+
+    public void eat() {
+        if (!isFakePlayer && player.networkHandler != null) {
+            player.networkHandler.sendPacket(new EntityAnimationS2CPacket(player, 3));
+        }
+    }
+
+    public boolean canEat() {
+        return player.canConsume(false);
+    }
+
     public void enterAttackCooldown() {
         // Client has a 10-tick delay between sending attack packets
-        attackCooldown = 10;
+        // Add extra tick to account for tickCooldown()
+        attackCooldown = 11;
     }
 
     public void enterMiningCooldown() {
-        miningCooldown = player.interactionManager.isCreative() ? 5 : 0;
+        miningCooldown = player.interactionManager.isCreative() ? 6 : 0;
+    }
+
+    public void enterUseCooldown() {
+        useCooldown = 3;
+    }
+
+    public void enterEatCooldown(int interval) {
+        eatCooldown = interval <= 1 ? random.nextInt(5) + 19 : interval;
+    }
+
+    public void tickCooldown() {
+        if (miningCooldown > 0) {
+            miningCooldown--;
+        }
+        if (attackCooldown > 0) {
+            attackCooldown--;
+        }
+        if (useCooldown > 0) {
+            useCooldown--;
+        }
+        if (eatCooldown > 0) {
+            eatCooldown--;
+        }
     }
 
     public float getMaxReach() {
         return player.interactionManager.isCreative() ? 5.0f : 4.5f;
+    }
+
+    public float getMaxEntityReach() {
+        return 3.0f;
     }
 
     public void copyFrom(PlayerController other) {

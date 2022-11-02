@@ -6,11 +6,29 @@ import net.minecraft.command.CommandSource;
 import net.minecraft.server.world.ServerWorld;
 
 public class RugSettings {
+    public static final String CHEATY = "cheaty";
     public static final String COMMAND = "command";
     public static final String CREATIVE = "creative";
     public static final String EXPERIMENTAL = "experimental";
     public static final String FEATURE = "feature";
     public static final String SURVIVAL = "survival";
+
+    @Rule(
+            desc = "Players can automatically consume food", categories = {CHEATY, SURVIVAL},
+            remarks = {
+                    "Action must be attached via /player",
+                    "Intended for use by bots since 1.8 doesn't have off-hand.",
+                    "Super cheaty, don't use lol."})
+    public static boolean allowAutoEating = false;
+
+    @Rule(
+            desc = "Players can drop all its experience on the ground", categories = {CHEATY, SURVIVAL},
+            remarks = {
+                    "Action must be performed via /player",
+                    "When set to limited, players only drop the amount they would",
+                    "have if they'd died. Intended for use on bots to drop the",
+                    "XP they gain from mob farms."})
+    public static BotExperienceDropType allowXpDumping = BotExperienceDropType.NONE;
 
     @Rule(desc = "Announce when a player has skipped the night", categories = {SURVIVAL})
     public static boolean announceSleep = true;
@@ -21,16 +39,11 @@ public class RugSettings {
     @Rule(desc = "Barrier block will suppress any further neighboring block updates", categories = {CREATIVE})
     public static boolean barrierBlockSuppressesUpdates = false;
 
-    @Rule(
-            desc = "Bots can drop all its experience on the ground", categories = {SURVIVAL},
-            remarks = "When set to limited, bots only drop the amount they would have if they'd died")
-    public static BotExperienceDropType botsCanDropXp = BotExperienceDropType.NONE;
-
     @Rule(desc = "Allows entering camera mode even if damage was taken recently", categories = {SURVIVAL})
     public static OpEnableOption cameraModeDisableDamageCooldown = OpEnableOption.FALSE;
 
     @Rule(
-            desc = "Instantly pick-up mined items if sneaking", categories = {FEATURE, SURVIVAL},
+            desc = "Instantly pick-up mined items if sneaking", categories = {CHEATY, FEATURE, SURVIVAL},
             remarks = "Only applicable if the player is subscribed to carefulBreak")
     public static boolean carefulBreak = false;
 
@@ -45,7 +58,7 @@ public class RugSettings {
     @Rule(desc = "Enables /tick for tick manipulation", categories = {COMMAND, CREATIVE})
     public static OpEnableOption commandTick = OpEnableOption.OP;
 
-    @Rule(desc = "Disables enderman griefing (i.e. block pick-up)", categories = {SURVIVAL})
+    @Rule(desc = "Disables enderman griefing (i.e. block pick-up)", categories = {CHEATY, SURVIVAL})
     public static boolean endermanNoGriefing = false;
 
     @Rule(desc = "Specify the block limit for /clone and /fill", categories = {CREATIVE})
@@ -68,7 +81,7 @@ public class RugSettings {
             options = {"0", "25", "50", "75", "100"})
     public static int sleepPercentage = 100;
 
-    @Rule(desc = "Disables pick-up cooldown for XP orbs", categories = {SURVIVAL})
+    @Rule(desc = "Disables pick-up cooldown for XP orbs", categories = {CHEATY, SURVIVAL})
     public static boolean xpNoCooldown = false;
 
     public static class HandlePlayerChange implements Validator<OpEnableOption> {

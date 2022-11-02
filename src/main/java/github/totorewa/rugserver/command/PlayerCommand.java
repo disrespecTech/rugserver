@@ -154,6 +154,10 @@ public class PlayerCommand extends AbstractRugCommand {
             source.sendMessage(new Message("Player must be online", Message.RED).toText());
             return true;
         }
+        if (!actionType.action.isEnabled()) {
+            source.sendMessage(new Message("Action is not enabled. Please update rug rules to enable it.", Message.RED).toText());
+            return true;
+        }
         PlayerController controller = ((IPlayerControllerAccessor) player).getPlayerController();
         String period;
         if (commandArgs.length <= i || (period = commandArgs[i++]).isEmpty() || period.equalsIgnoreCase("once")) {
@@ -205,15 +209,15 @@ public class PlayerCommand extends AbstractRugCommand {
             if (what.equals("all"))
                 controller.dropAll();
             else if (what.equals("xp")) {
-                if (RugSettings.botsCanDropXp == RugSettings.BotExperienceDropType.NONE) {
+                if (RugSettings.allowXpDumping == RugSettings.BotExperienceDropType.NONE) {
                     Text text = new Message("Experience dropping is disabled.", Message.RED).toText();
                     Text commandShortcut = new Message(" [Enable?]", Message.AQUA).toText();
                     commandShortcut.getStyle()
                             .setClickEvent(
-                                    new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/rug botsCanDropXp limited"))
+                                    new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/rug allowXpDumping limited"))
                             .setHoverEvent(
                                     new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-                                            Message.createComponent("click to enable experience dropping for bots")));
+                                            Message.createComponent("click to enable experience dropping")));
                     source.sendMessage(text.append(commandShortcut));
                     return;
                 }

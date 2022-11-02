@@ -8,8 +8,10 @@ import java.util.stream.Collectors;
 
 public enum PlayerActionType {
     ATTACK(PlayerAttackAction.class, "attack"),
+    EAT(PlayerEatAction.class, "eat"),
     DROP(PlayerDropAction.class, "drop"),
-    DROP_STACK(PlayerDropStackAction.class, "dropStack");
+    DROP_STACK(PlayerDropStackAction.class, "dropStack"),
+    USE(PlayerUseAction.class, "use");
 
     public static final Map<String, PlayerActionType> nameMap;
     public static final Set<String> names;
