@@ -3,7 +3,7 @@ package github.totorewa.rugserver.feature.player;
 import github.totorewa.rugserver.feature.player.actions.ActionParameters;
 import github.totorewa.rugserver.feature.player.actions.PlayerActionType;
 
-public class ActionAttachment {
+public class ActionAttachment implements Augmentation {
     public final PlayerActionType actionType;
     public final ActionParameters parameters;
 
@@ -36,12 +36,24 @@ public class ActionAttachment {
         }
     }
 
-    public void remove() {
+    @Override
+    public void scheduleDisable() {
         toBeRemoved = true;
     }
 
-    public boolean isFinished() {
+    @Override
+    public boolean isDisabled() {
         return forceFinish || isLimitReached();
+    }
+
+    @Override
+    public String getName() {
+        return actionType.actionName;
+    }
+
+    @Override
+    public boolean conflictsWith(Augmentation other) {
+        return other instanceof ActionAttachment && actionType.action.conflictsWith(((ActionAttachment) other).actionType);
     }
 
     private boolean isLimitReached() {

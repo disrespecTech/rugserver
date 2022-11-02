@@ -22,8 +22,8 @@ import net.minecraft.util.math.Vec3d;
 import java.util.*;
 
 public class PlayerController {
-    private final Map<Integer, ActionAttachment> attachmentMap = Maps.newHashMap();
-    private final Set<ActionAttachment> attachments = Sets.newHashSet();
+    private final Map<Integer, ActionAttachment> actionMap = Maps.newHashMap();
+    private final Set<Augmentation> augmentations = Sets.newHashSet();
     public final ServerPlayerEntity player;
     public final boolean isFakePlayer;
     public final Random random = new Random();
@@ -41,37 +41,43 @@ public class PlayerController {
 
     public void tick() {
         if (!player.isSpectator()) {
-            List<ActionAttachment> removed = new ArrayList<>(attachments.size());
-            for (ActionAttachment attachment : attachments) {
-                attachment.tick(this);
-                if (attachment.isFinished())
-                    removed.add(attachment);
+            List<Augmentation> removed = new ArrayList<>(augmentations.size());
+            for (Augmentation aug : augmentations) {
+                aug.tick(this);
+                if (aug.isDisabled())
+                    removed.add(aug);
             }
             removed.forEach(a -> {
-                attachments.remove(a);
-                attachmentMap.remove(a.actionType.ordinal(), a);
+                augmentations.remove(a);
+                if (a instanceof ActionAttachment)
+                    actionMap.remove(((ActionAttachment) a).actionType.ordinal(), a);
             });
         }
         tickCooldown();
     }
 
-    public void addAttachment(ActionAttachment attachment) {
-        ActionAttachment previous = attachmentMap.put(attachment.actionType.ordinal(), attachment);
-        attachments.add(attachment);
-        if (previous != null) previous.remove();
-        for (ActionAttachment other : attachments) {
-            if (attachment.actionType.action.conflictsWith(other.actionType))
-                other.remove();
+    public void addAugmentation(Augmentation aug) {
+        augmentations.add(aug);
+        if (aug instanceof ActionAttachment) {
+            ActionAttachment attachment = (ActionAttachment) aug;
+            ActionAttachment previous = actionMap.put(attachment.actionType.ordinal(), attachment);
+            if (previous != null) previous.scheduleDisable();
+        }
+        for (ActionAttachment other : actionMap.values()) {
+            if (aug.conflictsWith(other))
+                other.scheduleDisable();
         }
     }
 
-    public boolean removeAttachment(PlayerActionType type) {
-        ActionAttachment attachment = attachmentMap.remove(type.ordinal());
-        if (attachment != null) {
-            attachment.remove();
-            return true;
+    public boolean removeAugmentationByName(String name) {
+        boolean matched = false;
+        for (Augmentation aug : augmentations) {
+            if (aug.getName().equals(name)) {
+                aug.scheduleDisable();
+                matched = true;
+            }
         }
-        return false;
+        return matched;
     }
 
     public boolean mountNearbyVehicle() {
@@ -214,7 +220,7 @@ public class PlayerController {
     }
 
     public void copyFrom(PlayerController other) {
-        other.attachments.forEach(this::addAttachment);
+        other.augmentations.forEach(this::addAugmentation);
         attackCooldown = other.attackCooldown;
     }
 }

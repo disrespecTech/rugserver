@@ -13,6 +13,7 @@ public class CommandManagerMixin extends CommandRegistry {
     @Inject(method = "<init>", at = @At("TAIL"))
     private void addCommands(CallbackInfo ci) {
         registerCommand(new CameraCommand());
+        registerCommand(new FlowerCommand());
         registerCommand(new LogCommand());
         registerCommand(new PlayerCommand());
         registerCommand(new RugCommand());

@@ -161,7 +161,7 @@ public class PlayerCommand extends AbstractRugCommand {
         PlayerController controller = ((IPlayerControllerAccessor) player).getPlayerController();
         String period;
         if (commandArgs.length <= i || (period = commandArgs[i++]).isEmpty() || period.equalsIgnoreCase("once")) {
-            controller.addAttachment(new ActionAttachment(actionType, 1, 1, false));
+            controller.addAugmentation(new ActionAttachment(actionType, 1, 1, false));
             AbstractCommand.run(source, this, 1, String.format("Updated %s's %s action", player.getGameProfile().getName(), actionType.actionName));
             return true;
         }
@@ -173,13 +173,13 @@ public class PlayerCommand extends AbstractRugCommand {
                 return true;
             }
             int ticks = parseClampedInt(tickStr, 2);
-            controller.addAttachment(new ActionAttachment(actionType, ticks, -1, false));
+            controller.addAugmentation(new ActionAttachment(actionType, ticks, -1, false));
             AbstractCommand.run(source, this, 1, String.format("Updated %s's %s action", player.getGameProfile().getName(), actionType.actionName));
             return true;
         }
 
         if (period.equalsIgnoreCase("continuous")) {
-            controller.addAttachment(new ActionAttachment(actionType, 1, -1, true));
+            controller.addAugmentation(new ActionAttachment(actionType, 1, -1, true));
             AbstractCommand.run(source, this, 1, String.format("Updated %s's %s action", player.getGameProfile().getName(), actionType.actionName));
             return true;
         }

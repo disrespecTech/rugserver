@@ -50,6 +50,9 @@ public class RugSettings {
     @Rule(desc = "Enables /cs for entering/exiting camera mode", categories = {FEATURE, COMMAND, SURVIVAL})
     public static OpEnableOption commandCamera = OpEnableOption.FALSE;
 
+    @Rule(desc = "Enables /flower for painting flowers in flower forests", categories = {COMMAND, CREATIVE})
+    public static OpEnableOption commandFlower = OpEnableOption.OP;
+
     @Rule(
             desc = "Enables /player for player spawning", categories = {FEATURE, COMMAND, EXPERIMENTAL},
             validator = HandlePlayerChange.class)
