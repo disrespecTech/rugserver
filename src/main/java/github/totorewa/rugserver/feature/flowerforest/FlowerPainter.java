@@ -13,6 +13,9 @@ import net.minecraft.item.Items;
 import net.minecraft.util.DyeColor;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
+import net.minecraft.world.chunk.Chunk;
 
 public class FlowerPainter implements Augmentation {
     public static final String NAME = "flower_painter";
@@ -46,7 +49,7 @@ public class FlowerPainter implements Augmentation {
         for (; pos.getX() <= maxX; pos.setPosition(pos.getX() + 1, pos.getY(), minZ)) {
             for (; pos.getZ() <= maxZ; pos.setPosition(pos.getX(), pos.getY(), pos.getZ() + 1)) {
                 if (ctrl.player.world.isAir(pos)) {
-                    FlowerBlock.FlowerType flowerType = ctrl.player.world.getBiome(pos).pickFlower(ctrl.random, pos);
+                    FlowerBlock.FlowerType flowerType = getBiome(ctrl.player.world, pos).pickFlower(ctrl.random, pos);
                     FlowerBlock flower = flowerType.getColor().getBlock();
                     BlockState state = flower.getDefaultState().with(flower.method_8781(), flowerType);
                     if (flower.method_8691(ctrl.player.world, pos, state)) {
@@ -59,7 +62,7 @@ public class FlowerPainter implements Augmentation {
         if (planted) {
             ctrl.player.world.syncGlobalEvent(2005, pos, 0);
             Block.Sound sound = Block.GRASS;
-            ctrl.player.world.playSound((float)testPos.getX() + 0.5f, (float)testPos.getY() + 0.5f, (float)testPos.getZ() + 0.5f, sound.getSound(), (sound.getVolume() + 1.0f) / 2.0f, sound.getPitch() * 0.8f);
+            ctrl.player.world.playSound((float) testPos.getX() + 0.5f, (float) testPos.getY() + 0.5f, (float) testPos.getZ() + 0.5f, sound.getSound(), (sound.getVolume() + 1.0f) / 2.0f, sound.getPitch() * 0.8f);
         }
         cooldown();
     }
@@ -101,6 +104,17 @@ public class FlowerPainter implements Augmentation {
     }
 
     private void cooldown() {
-        cooldown = 20;
+        cooldown = 10;
+    }
+
+    private static Biome getBiome(World world, BlockPos pos) {
+        if (world.blockExists(pos)) {
+            Chunk chunk = world.getChunk(pos);
+            try {
+                return chunk.getBiomeAt(pos, world.dimension.getBiomeSource());
+            } catch (Throwable ignored) {
+            }
+        }
+        return world.dimension.getBiomeSource().getBiomeAt(pos, Biome.PLAINS);
     }
 }
