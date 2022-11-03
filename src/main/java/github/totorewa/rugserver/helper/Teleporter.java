@@ -12,15 +12,19 @@ public final class Teleporter {
     private Teleporter() {
     }
 
-    public static void teleportPlayer(ServerPlayerEntity player, double x, double y, double z, int dimension) {
-        teleportPlayer(player, x, y, z, dimension, player.yaw, player.pitch);
+    public static void teleportPlayer(ServerPlayerEntity player, double x, double y, double z, int dimension, float yaw, float pitch) {
+        teleportPlayer(player.server.getWorld(dimension), player, x, y, z, yaw, pitch, false);
     }
 
-    public static void teleportPlayer(ServerPlayerEntity player, double x, double y, double z, int dimension, float yaw, float pitch) {
-        teleportPlayer(player.server.getWorld(dimension), player, x, y, z, yaw, pitch);
+    public static void teleportPlayer(ServerPlayerEntity player, double x, double y, double z, int dimension, float yaw, float pitch, boolean checkCollision) {
+        teleportPlayer(player.server.getWorld(dimension), player, x, y, z, yaw, pitch, checkCollision);
     }
 
     public static void teleportPlayer(ServerWorld world, ServerPlayerEntity player, double x, double y, double z, float yaw, float pitch) {
+        teleportPlayer(world, player, x, y, z, yaw, pitch, false);
+    }
+
+    public static void teleportPlayer(ServerWorld world, ServerPlayerEntity player, double x, double y, double z, float yaw, float pitch, boolean checkCollision) {
         player.method_10763(player);
         player.startRiding(null);
         if (player.dimension != world.dimension.getType()) {
@@ -30,7 +34,7 @@ public final class Teleporter {
             player.networkHandler.sendPacket(new PlayerRespawnS2CPacket(player.dimension, currentWorld.getGlobalDifficulty(), currentWorld.getLevelProperties().getGeneratorType(), player.interactionManager.getGameMode()));
             currentWorld.method_3700(player);
             player.removed = false;
-            player.refreshPositionAndAngles(x, y, z, yaw, pitch);
+            player.refreshPositionAndAngles(x + 0.5f, y + 0.1f, z + 0.5f, yaw, pitch);
             if (player.isAlive()) {
                 currentWorld.checkChunk(player, false);
                 world.spawnEntity(player);
@@ -38,11 +42,18 @@ public final class Teleporter {
             }
             player.setWorld(world);
             playerManager.method_1986(player, currentWorld);
-            player.refreshPositionAfterTeleport(x, y, z);
+            if (checkCollision && player.isAlive()) {
+                elevateUntilNoCollision(world, player);
+            }
+            player.refreshPositionAfterTeleport(x, player.y + 0.1f, z);
             player.interactionManager.setWorld(world);
             playerManager.sendWorldInfo(player, world);
             playerManager.method_2009(player);
         } else {
+            if (checkCollision && player.isAlive()) {
+                player.refreshPositionAndAngles(x + 0.5f, y + 0.1f, z + 0.5f, yaw, pitch);
+                elevateUntilNoCollision(world, player);
+            }
             player.yaw = yaw % 360.0f;
             player.pitch = pitch % 360.0f;
             player.refreshPositionAfterTeleport(x, y, z);
@@ -72,6 +83,12 @@ public final class Teleporter {
                             0,
                             world.random.nextInt(offsetRange * 2) - offsetRange));
         }
-        teleportPlayer(world, player, spawnPos.getX(), spawnPos.getY(), spawnPos.getZ(), 0.0f, 0.0f);
+        teleportPlayer(world, player, spawnPos.getX(), spawnPos.getY(), spawnPos.getZ(), 0.0f, 0.0f, true);
+    }
+
+    private static void elevateUntilNoCollision(ServerWorld world, ServerPlayerEntity player) {
+        while (!world.doesBoxCollide(player, player.getBoundingBox()).isEmpty() && player.y < 256.0) {
+            player.updatePosition(player.x, player.y + 1.0, player.z);
+        }
     }
 }
