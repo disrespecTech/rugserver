@@ -43,6 +43,8 @@ public final class Teleporter {
             playerManager.sendWorldInfo(player, world);
             playerManager.method_2009(player);
         } else {
+            player.yaw = yaw % 360.0f;
+            player.pitch = pitch % 360.0f;
             player.refreshPositionAfterTeleport(x, y, z);
         }
         player.velocityY = player.horizontalSpeed = player.fallDistance = 0;
