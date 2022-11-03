@@ -4,6 +4,7 @@ import com.google.common.collect.Sets;
 import com.mojang.authlib.GameProfile;
 import github.totorewa.rugserver.RugSettings;
 import github.totorewa.rugserver.fake.PlayerCameraHandler;
+import github.totorewa.rugserver.helper.Teleporter;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.damage.EntityDamageSource;
@@ -163,33 +164,8 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements Pl
     @Override
     public boolean exitCameraMode() {
         if (!isInCameraMode || !isPlayerConnected()) return false;
-        method_10763(this);
-        startRiding(null);
-        if (dimension != survivalDimension) {
-            PlayerManager playerManager = server.getPlayerManager();
-            ServerWorld currentWorld = getServerWorld();
-            ServerWorld targetWorld = server.getWorld(survivalDimension);
-            dimension = survivalDimension;
-            networkHandler.sendPacket(new PlayerRespawnS2CPacket(dimension, currentWorld.getGlobalDifficulty(), currentWorld.getLevelProperties().getGeneratorType(), interactionManager.getGameMode()));
-            currentWorld.method_3700(this);
-            removed = false;
-            refreshPositionAndAngles(survivalPos.x, survivalPos.y, survivalPos.z, survivalYaw, survivalPitch);
-            if (isAlive()) {
-                currentWorld.checkChunk(this, false);
-                targetWorld.spawnEntity(this);
-                targetWorld.checkChunk(this, false);
-            }
-            setWorld(targetWorld);
-            playerManager.method_1986((ServerPlayerEntity) (Object) this, currentWorld);
-            refreshPositionAfterTeleport(survivalPos.x, survivalPos.y, survivalPos.z);
-            interactionManager.setWorld(targetWorld);
-            playerManager.sendWorldInfo((ServerPlayerEntity) (Object) this, targetWorld);
-            playerManager.method_2009((ServerPlayerEntity) (Object) this);
-        } else {
-            refreshPositionAfterTeleport(survivalPos.x, survivalPos.y, survivalPos.z);
-        }
+        Teleporter.teleportPlayer((ServerPlayerEntity) (Object) this, survivalPos.x, survivalPos.y, survivalPos.z, survivalDimension, survivalYaw, survivalPitch);
         setGameMode(LevelInfo.GameMode.SURVIVAL);
-        velocityY = horizontalSpeed = fallDistance = 0;
         clearStatusEffects();
         for (StatusEffectInstance effect : survivalEffects) {
             addStatusEffect(effect);
