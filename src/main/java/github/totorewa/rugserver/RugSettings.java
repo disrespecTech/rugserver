@@ -82,6 +82,9 @@ public class RugSettings {
     @Rule(desc = "Save log subscriptions to disk and load on start-up", categories = {CREATIVE, SURVIVAL})
     public static boolean persistLogSubscriptions = false;
 
+    @Rule(desc = "Players can set their spawn at a bed without having to sleep in it", categories = {SURVIVAL})
+    public static boolean setSpawnWithoutSleep = false;
+
     @Rule(
             desc = "Percentage of players required to sleep to skip the night", categories = {FEATURE, SURVIVAL},
             options = {"0", "25", "50", "75", "100"})

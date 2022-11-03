@@ -33,6 +33,7 @@
     "feature.oneblocksuppressor.WorldMixin",
     "feature.opnocheating.TeleportCommandMixin",
     "feature.player.ServerPlayerEntityMixin",
+    "feature.setspawn.PlayerEntityMixin",
     "feature.xpcooldown.ExperienceOrbEntityMixin",
     "logging.MinecraftServerMixin"
   ],
