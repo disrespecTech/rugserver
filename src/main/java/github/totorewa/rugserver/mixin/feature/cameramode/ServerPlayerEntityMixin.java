@@ -165,7 +165,7 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements Pl
     public boolean exitCameraMode() {
         if (!isInCameraMode || !isPlayerConnected()) return false;
         Teleporter.teleportPlayer((ServerPlayerEntity) (Object) this, survivalPos.x, survivalPos.y, survivalPos.z, survivalDimension, survivalYaw, survivalPitch);
-        setGameMode(LevelInfo.GameMode.SURVIVAL);
+        setGameMode(server.getDefaultGameMode());
         clearStatusEffects();
         for (StatusEffectInstance effect : survivalEffects) {
             addStatusEffect(effect);
