@@ -162,8 +162,8 @@ public class PlayerController {
     }
 
     public void swingHand() {
+        player.swingHand();
         if (!isFakePlayer && player.networkHandler != null) {
-            player.swingHand();
             player.networkHandler.sendPacket(new EntityAnimationS2CPacket(player, 0));
         }
     }
