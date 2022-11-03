@@ -69,6 +69,14 @@ _Only applicable if the player is subscribed to `carefulBreak`_
 * Required options: `true`, `false`
 * Categories: `FEATURE`, `SURVIVAL`
 
+### crossDimensionalTeleporting
+Teleport to entities in other dimensions
+
+* Type: `boolean`
+* Default value: `false`
+* Required options: `true`, `false`
+* Categories: `CREATIVE`
+
 ### commandCamera 
 Enables `/cs` for entering/exiting camera mode
 
@@ -155,6 +163,14 @@ Save log subscriptions to disk and load on start-up
 * Default value: `false`
 * Required options: `true`, `false`
 * Categories: `CREATIVE`, `SURVIVAL`
+
+### setSpawnWithoutSleep
+Players can set their spawn at a bed without having to sleep in it
+
+* Type: `boolean`
+* Default: `false`
+* Options: `true`, `false`
+* Categories: `SURVIVAL`
 
 ### sleepPercentage
 Percentage of players required to sleep to skip the night
