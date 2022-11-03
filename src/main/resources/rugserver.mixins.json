@@ -21,6 +21,7 @@
     "logging.ServerWorldAccessor"
   ],
   "mixins": [
+    "feature.crossdimtp.TeleportCommandMixin",
     "feature.endermangriefing.PickUpBlockGoalMixin",
     "feature.fill.ChunkMixin",
     "feature.fill.CloneCommandMixin",

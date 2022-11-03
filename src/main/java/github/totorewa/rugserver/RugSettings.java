@@ -47,6 +47,9 @@ public class RugSettings {
             remarks = "Only applicable if the player is subscribed to carefulBreak")
     public static boolean carefulBreak = false;
 
+    @Rule(desc = "Teleport to entities in other dimensions", categories = {CREATIVE})
+    public static boolean crossDimensionalTeleporting = false;
+
     @Rule(desc = "Enables /cs for entering/exiting camera mode", categories = {FEATURE, COMMAND, SURVIVAL})
     public static OpEnableOption commandCamera = OpEnableOption.FALSE;
 
